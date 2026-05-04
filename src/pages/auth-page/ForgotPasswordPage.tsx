@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { InputField } from '../components/common/InputField';
-import { Button } from '../components/common/Button';
+import { InputField } from '../../components/common/InputField';
+import { Button } from '../../components/common/Button';
 
 export const ForgotPasswordPage: React.FC = () => {
   const handleVerify = (e: React.FormEvent) => {

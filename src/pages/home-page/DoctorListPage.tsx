@@ -1,9 +1,9 @@
 // src/pages/DoctorListPage.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
-import { DoctorCard } from '../components/common/DoctorCard';
-import type { Doctor } from '../types/models/Doctor';
+import { Header } from '../../components/layout/Header';
+import { DoctorCard } from '../../components/common/DoctorCard';
+import type { Doctor } from '../../types/models/Doctor';
 
 // Mock data: Danh sách bác sĩ
 const doctorsList: Doctor[] = [

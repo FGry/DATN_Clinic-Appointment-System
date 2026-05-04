@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PatientLayout } from '../components/layout/PatientLayout';
+import { PatientLayout } from '../../components/layout/PatientLayout';
 
 export const PatientAppointmentsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);

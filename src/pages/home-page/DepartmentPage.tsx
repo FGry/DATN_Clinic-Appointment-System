@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
-import { DoctorCard } from '../components/common/DoctorCard';
-import type { Doctor } from '../types/models/Doctor';
+import { Header } from '../../components/layout/Header';
+import { DoctorCard } from '../../components/common/DoctorCard';
+import type { Doctor } from '../../types/models/Doctor';
 
 const departmentDoctors: Doctor[] = [
   { id: '1', name: 'Dr. James Wilson', specialty: 'Cardiologist', schedule: 'Mon - Fri: 08:00 AM - 04:00 PM', imageUrl: 'https://placehold.co/400x300' },

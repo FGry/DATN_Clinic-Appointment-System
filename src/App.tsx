@@ -1,27 +1,27 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Import các Pages đã tạo
-import { LoginPage } from './pages/LoginPage';
-import { DepartmentPage } from './pages/DepartmentPage';
+import { LoginPage } from './pages/auth-page/LoginPage';
+import { DepartmentPage } from './pages/home-page/DepartmentPage';
 // Giả sử bạn đã tạo các file này tương tự cấu trúc tôi đã hướng dẫn
-import { RegisterPage } from './pages/RegisterPage'; 
-import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
-import { HomePage } from './pages/HomePage';
-import { DoctorListPage } from './pages/DoctorListPage';
-import { ReceptionDashboardPage } from './pages/ReceptionDashboardPage';
-import { ReceptionTimelinePage } from './pages/ReceptionTimelinePage';
-import { ReceptionListPage } from './pages/ReceptionListPage';
-import { DoctorDashboardPage } from './pages/DoctorDashboardPage';
-import { DoctorSchedulePage } from './pages/DoctorSchedulePage';
-import { DoctorPatientsPage } from './pages/DoctorPatientsPage';
-import { PatientDashboardPage } from './pages/PatientDashboardPage';
-import { PatientAppointmentsPage } from './pages/PatientAppointmentsPage';
-import { PatientAppointmentDetailsPage } from './pages/PatientAppointmentDetailsPage';
-import { PatientPastAppointmentPage } from './pages/PatientPastAppointmentPage';
-import { AdminDoctorsPage } from './pages/AdminDoctorsPage';
-import { AdminReceptionistsPage } from './pages/AdminReceptionistsPage';
-import { AdminSpecialtiesPage } from './pages/AdminSpecialtiesPage';
-import { AdminPatientsPage } from './pages/AdminPatientsPage';
-import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { RegisterPage } from './pages/auth-page/RegisterPage'; 
+import { ForgotPasswordPage } from './pages/auth-page/ForgotPasswordPage';
+import { HomePage } from './pages/home-page/HomePage';
+import { DoctorListPage } from './pages/home-page/DoctorListPage';
+import { ReceptionDashboardPage } from './pages/receptionist-page/ReceptionDashboardPage';
+import { ReceptionListPage } from './pages/receptionist-page/ReceptionListPage';
+import { ReceptionTimelinePage } from './pages/receptionist-page/ReceptionTimelinePage';
+import { DoctorDashboardPage } from './pages/doctor-page/DoctorDashboardPage';
+import { DoctorSchedulePage } from './pages/doctor-page/DoctorSchedulePage';
+import { DoctorPatientsPage } from './pages/doctor-page/DoctorPatientsPage';
+import { PatientDashboardPage } from './pages/patient-page/PatientDashboardPage';
+import { PatientAppointmentsPage } from './pages/patient-page/PatientAppointmentsPage';
+import { PatientAppointmentDetailsPage } from './pages/patient-page/PatientAppointmentDetailsPage';
+import { PatientPastAppointmentPage } from './pages/patient-page/PatientPastAppointmentPage';
+import { AdminDoctorsPage } from './pages/admin-page/AdminDoctorsPage';
+import { AdminReceptionistsPage } from './pages/admin-page/AdminReceptionistsPage';
+import { AdminSpecialtiesPage } from './pages/admin-page/AdminSpecialtiesPage';
+import { AdminPatientsPage } from './pages/admin-page/AdminPatientsPage';
+import { AdminDashboardPage } from './pages/admin-page/AdminDashboardPage';
 
 function App() {
   return (

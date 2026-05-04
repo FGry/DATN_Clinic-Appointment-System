@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReceptionLayout } from '../components/layout/ReceptionLayout';
+import { ReceptionLayout } from '../../components/layout/ReceptionLayout';
 import { Link } from 'react-router-dom';
 
 export const ReceptionListPage: React.FC = () => {

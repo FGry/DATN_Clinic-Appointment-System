@@ -1,28 +1,28 @@
 import React from 'react';
-import { PatientLayout } from '../components/layout/PatientLayout';
+import { PatientLayout } from '../../components/layout/PatientLayout';
 import { Link } from 'react-router-dom';
 
-export const PatientPastAppointmentPage: React.FC = () => {
+export const PatientAppointmentDetailsPage: React.FC = () => {
   return (
     <PatientLayout>
       <div className="mx-auto" style={{ maxWidth: '900px' }}>
-        {/* Header Section */}
+        {/* Header */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5">
           <div>
-            <h2 className="fw-bolder font-manrope text-dark mb-1">Appointment Details</h2>
+            <h2 className="fw-bolder font-manrope text-dark mb-2">Appointment Details</h2>
             <p className="text-muted mb-0">Review your upcoming medical consultation information.</p>
           </div>
-          <Link to="/patient/appointments" className="btn btn-link text-primary fw-bold text-decoration-none d-flex align-items-center gap-2 px-0 hover-opacity">
+          <Link to="/patient/appointments" className="btn btn-link text-primary fw-bold text-decoration-none d-flex align-items-center gap-2 px-0">
             <i className="bi bi-arrow-left"></i> Back to List
           </Link>
         </div>
 
         {/* Detail Card */}
         <div className="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
-          {/* Card Header with Status */}
+          {/* Top Status Bar */}
           <div className="card-header bg-white border-bottom p-4 p-md-5 d-flex justify-content-between align-items-center">
-            <div className="d-flex flex-column gap-1">
-              <span className="text-muted fw-bold text-uppercase" style={{ fontSize: '11px', letterSpacing: '1px' }}>Appointment ID</span>
+            <div>
+              <p className="text-muted fw-bold text-uppercase mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Appointment ID</p>
               <h4 className="fw-bolder font-manrope text-dark m-0">#APT-20231024-089</h4>
             </div>
             <div className="bg-light text-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 border">
@@ -31,10 +31,9 @@ export const PatientPastAppointmentPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Main Details Grid */}
           <div className="card-body p-4 p-md-5">
             <div className="row g-5">
-              {/* Doctor Info */}
+              {/* Practitioner */}
               <div className="col-md-6 d-flex gap-4">
                 <div className="bg-light border rounded-4 d-flex align-items-center justify-content-center text-primary flex-shrink-0" style={{ width: '64px', height: '64px' }}>
                   <i className="bi bi-heart-pulse fs-3"></i>
@@ -66,39 +65,31 @@ export const PatientPastAppointmentPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Clinic Message */}
+              {/* Message from clinic */}
               <div className="col-12">
                 <div className="bg-warning-subtle border-start border-4 border-warning rounded-end-3 p-4 d-flex gap-3">
-                  <i className="bi bi-info-circle-fill text-warning fs-5 mt-1"></i>
+                  <i className="bi bi-info-circle-fill text-warning fs-5"></i>
                   <div>
                     <h6 className="fw-bold text-dark mb-1">Message from Clinic</h6>
-                    <p className="text-dark opacity-75 mb-0" style={{ fontSize: '14px', lineHeight: '1.6' }}>
-                      Vui lòng đến trước 15 phút để hoàn tất thủ tục check-in và đo các chỉ số sinh tồn cơ bản trước khi vào gặp bác sĩ.
-                    </p>
+                    <p className="text-dark opacity-75 mb-0" style={{ fontSize: '14px' }}>Vui lòng đến trước 15 phút để hoàn tất thủ tục check-in và đo các chỉ số sinh tồn cơ bản trước khi vào gặp bác sĩ.</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Action Footer */}
-          <div className="card-footer bg-light bg-opacity-50 border-top p-4 p-md-5 d-flex flex-wrap gap-3 justify-content-end">
-            <button className="btn btn-outline-secondary fw-bold px-4 py-2.5 rounded-3 d-flex align-items-center gap-2 bg-white transition-all active-scale">
+          {/* Card Footer Actions */}
+          <div className="card-footer bg-light border-top p-4 p-md-5 d-flex flex-wrap gap-3 justify-content-end">
+            <button className="btn btn-outline-secondary fw-bold px-4 py-2 rounded-3 d-flex align-items-center gap-2 bg-white">
               <i className="bi bi-download"></i> Download Summary
             </button>
-            <button className="btn btn-primary fw-bold px-4 py-2.5 rounded-3 shadow-sm transition-all active-scale">
+            <button className="btn btn-primary fw-bold px-4 py-2 rounded-3 shadow-sm">
               View Results
             </button>
-          </div>
-        </div>
-
-        {/* Visual Decorative Element (Asymmetric line at the bottom) */}
-        <div className="row g-4 mt-5 opacity-25" style={{ filter: 'grayscale(100%)', pointerEvents: 'none' }}>
-          <div className="col-4">
-            <div className="bg-primary rounded-pill" style={{ height: '4px' }}></div>
-          </div>
-          <div className="col-8">
-            <div className="bg-primary rounded-pill opacity-50" style={{ height: '4px' }}></div>
+            {/* Nếu lịch hẹn chưa hoàn thành thì hiện nút: 
+              <button className="btn btn-outline-danger fw-bold px-4 py-2 rounded-3 bg-white">Cancel Appointment</button> 
+              <button className="btn btn-primary fw-bold px-4 py-2 rounded-3 shadow-sm">Reschedule</button> 
+            */}
           </div>
         </div>
       </div>

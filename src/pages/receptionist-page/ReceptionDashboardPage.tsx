@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ReceptionLayout } from '../components/layout/ReceptionLayout';
+import { ReceptionLayout } from '../../components/layout/ReceptionLayout';
 
 export const ReceptionDashboardPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);

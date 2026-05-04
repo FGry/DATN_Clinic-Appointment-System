@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { InputField } from '../components/common/InputField';
-import { Button } from '../components/common/Button';
-import { authService, type LoginPayload } from '../services/authService';
+import { InputField } from '../../components/common/InputField';
+import { Button } from '../../components/common/Button';
+import { authService, type LoginPayload } from '../../services/authService';
 
 const initialForm: LoginPayload = {
   username: '',

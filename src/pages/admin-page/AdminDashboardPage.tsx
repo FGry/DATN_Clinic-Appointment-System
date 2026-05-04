@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminLayout } from '../components/layout/AdminLayout';
+import { AdminLayout } from '../../components/layout/AdminLayout';
 import { Link } from 'react-router-dom';
 
 export const AdminDashboardPage: React.FC = () => {

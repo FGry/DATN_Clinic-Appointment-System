@@ -1,5 +1,5 @@
 import React from 'react';
-import { DoctorLayout } from '../components/layout/DoctorLayout';
+import { DoctorLayout } from '../../components/layout/DoctorLayout';
 
 export const DoctorSchedulePage: React.FC = () => {
   return (
