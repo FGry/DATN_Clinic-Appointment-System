@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { LogoutButton } from '../common/LogoutButton';
 
 interface PatientLayoutProps {
   children: React.ReactNode;
@@ -56,10 +57,7 @@ export const PatientLayout: React.FC<PatientLayoutProps> = ({ children, onOpenBo
             </button>
             <div className="d-flex align-items-center gap-3 border-start ps-4">
               <img src="https://placehold.co/40x40" alt="Patient Profile" className="rounded-circle border border-primary" style={{ width: '40px', height: '40px' }} />
-              <button className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 fw-bold px-3 py-2 rounded-3 ms-2">
-                <i className="bi bi-box-arrow-right fs-6"></i>
-                Logout
-              </button>
+              <LogoutButton className="ms-2" />
             </div>
           </div>
         </header>

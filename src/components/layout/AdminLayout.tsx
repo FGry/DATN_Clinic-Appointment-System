@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { LogoutButton } from '../common/LogoutButton';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -78,10 +79,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 <small className="text-muted" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Super Admin</small>
               </div>
               <img src="https://placehold.co/40x40" alt="Admin Profile" className="rounded-circle border border-2 border-white shadow-sm" style={{ width: '40px', height: '40px' }} />
-              <button className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 fw-bold px-3 py-2 rounded-3 ms-2">
-                <i className="bi bi-box-arrow-right fs-6"></i>
-                <span className="d-none d-lg-block">Logout</span>
-              </button>
+              <LogoutButton className="ms-2" labelClassName="d-none d-lg-block" />
             </div>
           </div>
         </header>

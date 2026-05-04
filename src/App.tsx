@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Import các Pages đã tạo
 import { LoginPage } from './pages/LoginPage';
 import { DepartmentPage } from './pages/DepartmentPage';

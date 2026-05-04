@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { LogoutButton } from '../common/LogoutButton';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -70,10 +71,7 @@ export const ReceptionLayout: React.FC<LayoutProps> = ({ children, onOpenBooking
             </button>
             <div className="d-flex align-items-center gap-2 border-start ps-3">
               <img src="https://placehold.co/40x40" alt="Avatar" className="rounded-circle border" style={{ width: '38px', height: '38px' }} />
-              <button className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 ms-3 fw-medium">
-                <i className="bi bi-box-arrow-right fs-6"></i>
-                <span className="d-none d-md-inline">Logout</span>
-              </button>
+              <LogoutButton className="ms-3 fw-medium" labelClassName="d-none d-md-inline" />
             </div>
           </div>
         </header>

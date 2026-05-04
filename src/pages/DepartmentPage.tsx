@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { DoctorCard } from '../components/common/DoctorCard';
 import type { Doctor } from '../types/models/Doctor';
@@ -11,8 +11,6 @@ const departmentDoctors: Doctor[] = [
 ];
 
 export const DepartmentPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); 
-
   return (
     <div className="d-flex flex-column min-vh-100 bg-white">
       <Header />

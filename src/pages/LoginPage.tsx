@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { InputField } from '../components/common/InputField';
 import { Button } from '../components/common/Button';
+import { authService, type LoginPayload } from '../services/authService';
+
+const initialForm: LoginPayload = {
+  username: '',
+  password: '',
+};
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [form, setForm] = useState<LoginPayload>(initialForm);
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/');
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await authService.login(form);
+      authService.saveSession(response);
+      navigate('/patient');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please check your username and password.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -21,17 +50,39 @@ export const LoginPage: React.FC = () => {
         <div className="text-center mb-4">
           <h2 className="fw-bold text-primary">MedPoint Clinical</h2>
         </div>
-        
+
         <form onSubmit={handleLogin}>
-          <InputField id="email" label="Email" type="email" placeholder="name@example.com" required />
-          
+          {error && <div className="alert alert-danger py-2">{error}</div>}
+
+          <InputField
+            id="username"
+            name="username"
+            label="Username"
+            type="text"
+            placeholder="rewuindy1121"
+            value={form.username}
+            onChange={handleChange}
+            required
+          />
+
           <div className="d-flex justify-content-between align-items-center">
-            <label className="form-label fw-semibold mb-0">Password</label>
+            <label className="form-label fw-semibold mb-0" htmlFor="password">Password</label>
             <Link to="/forgot-password" className="text-decoration-none small fw-semibold">Forgot password?</Link>
           </div>
-          <InputField id="password" label="" type="password" placeholder="••••••••" required />
+          <InputField
+            id="password"
+            name="password"
+            label=""
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
 
-          <Button type="submit" fullWidth className="mt-3">Log in</Button>
+          <Button type="submit" fullWidth className="mt-3" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Log in'}
+          </Button>
 
           <p className="text-center mt-4 mb-0 text-muted">
             Don't have an account? <Link to="/register" className="text-decoration-none fw-bold">Register</Link>
