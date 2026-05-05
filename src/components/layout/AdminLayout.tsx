@@ -46,15 +46,6 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             Specialties
           </Link>
         </nav>
-
-        <div className="p-3 border-top mt-auto d-flex flex-column gap-1">
-          <Link to="/admin/settings" className="nav-link text-secondary hover-bg-light rounded d-flex align-items-center gap-3 px-3 py-2">
-            <i className="bi bi-gear-fill"></i> Settings
-          </Link>
-          <Link to="/admin/support" className="nav-link text-secondary hover-bg-light rounded d-flex align-items-center gap-3 px-3 py-2">
-            <i className="bi bi-question-circle-fill"></i> Support
-          </Link>
-        </div>
       </aside>
 
       {/* Main Wrapper */}
