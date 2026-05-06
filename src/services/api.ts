@@ -1,6 +1,6 @@
 import type { Specialty } from "../types/models/Specialty";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
 export class ApiError extends Error {
   status: number;
@@ -50,13 +50,13 @@ export const apiRequest = async <T>(path: string, options: RequestOptions = {}):
 // Specialties endpoints
 export const specialtyApi = {
   getAll: async () => {
-    const response = await fetch(`${API_BASE_URL}/admin/specialties`);
+    const response = await fetch(`${API_BASE_URL}/api/admin/specialties`);
     if (!response.ok) throw new Error('Failed to fetch specialties');
     return response.json();
   },
 
   create: async (data: Specialty) => {
-    const response = await fetch(`${API_BASE_URL}/admin/specialties`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/specialties`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -66,7 +66,7 @@ export const specialtyApi = {
   },
 
   update: async (id: number, data: Specialty) => {
-    const response = await fetch(`${API_BASE_URL}/admin/specialties/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/specialties/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -76,7 +76,7 @@ export const specialtyApi = {
   },
 
   delete: async (id: number) => {
-    const response = await fetch(`${API_BASE_URL}/admin/specialties/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/specialties/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) throw new Error('Failed to delete specialty');
