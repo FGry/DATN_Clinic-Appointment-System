@@ -21,7 +21,11 @@ const initialForm: RegisterPayload = {
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState<RegisterPayload>(initialForm);
-  const [error, setError] = useState('');
+  
+  // State lưu trữ lỗi cho từng trường (field)
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof RegisterPayload, string>>>({});
+  
+  const [globalError, setGlobalError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,17 +36,51 @@ export const RegisterPage: React.FC = () => {
       ...current,
       [name]: name === 'gender' ? value === 'true' : value,
     }));
+
+    // Tự động xóa lỗi của field đó khi người dùng bắt đầu gõ lại
+    if (fieldErrors[name as keyof RegisterPayload]) {
+      setFieldErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors: Partial<Record<keyof RegisterPayload, string>> = {};
+    let isValid = true;
+
+    // Ví dụ các logic validation đơn giản (Có thể thay bằng Yup/Zod sau này)
+    if (!form.email.includes('@')) {
+      errors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (form.phone.replace(/[^0-9]/g, '').length < 10) {
+      errors.phone = 'Phone number must be at least 10 digits';
+      isValid = false;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(form.password)) {
+      errors.password = 'Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.';
+      isValid = false;
+    }
+
+    if (form.password !== form.passwordConfirmation) {
+      errors.passwordConfirmation = 'Passwords do not match';
+      isValid = false;
+    }
+
+    setFieldErrors(errors);
+    return isValid;
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (form.password !== form.passwordConfirmation) {
-      setError('Password confirmation does not match.');
+    if (!validateForm()) {
       return;
     }
 
-    setError('');
+    setGlobalError('');
     setSuccess('');
     setIsSubmitting(true);
 
@@ -52,7 +90,7 @@ export const RegisterPage: React.FC = () => {
       setForm(initialForm);
       window.setTimeout(() => navigate('/login'), 1000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+      setGlobalError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -71,7 +109,8 @@ export const RegisterPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleRegister}>
-          {error && <div className="alert alert-danger py-2">{error}</div>}
+          {/* Global Error (Dùng cho lỗi Server/API) */}
+          {globalError && <div className="alert alert-danger py-2">{globalError}</div>}
           {success && <div className="alert alert-success py-2">{success}</div>}
 
           <div className="row g-2">
@@ -88,10 +127,30 @@ export const RegisterPage: React.FC = () => {
               <InputField id="dob" name="dob" label="Date of Birth" type="date" value={form.dob} onChange={handleChange} required />
             </div>
             <div className="col-md-6">
-              <InputField id="phone" name="phone" label="Phone Number" type="tel" placeholder="+1 (555) 000-0000" value={form.phone} onChange={handleChange} required />
+              <InputField 
+                id="phone" 
+                name="phone" 
+                label="Phone Number" 
+                type="tel" 
+                placeholder="+1 (555) 000-0000" 
+                value={form.phone} 
+                onChange={handleChange} 
+                error={fieldErrors.phone} 
+                required 
+              />
             </div>
             <div className="col-12">
-              <InputField id="email" name="email" label="Email Address" type="email" placeholder="john.doe@example.com" value={form.email} onChange={handleChange} required />
+              <InputField 
+                id="email" 
+                name="email" 
+                label="Email Address" 
+                type="email" 
+                placeholder="john.doe@example.com" 
+                value={form.email} 
+                onChange={handleChange} 
+                error={fieldErrors.email}
+                required 
+              />
             </div>
             <div className="col-12">
               <InputField id="address" name="address" label="Address" type="text" placeholder="123 Main Street" value={form.address} onChange={handleChange} required />
@@ -104,10 +163,30 @@ export const RegisterPage: React.FC = () => {
               </select>
             </div>
             <div className="col-md-6">
-              <InputField id="password" name="password" label="Password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
+              <InputField 
+                id="password" 
+                name="password" 
+                label="Password" 
+                type="password" 
+                placeholder="Password" 
+                value={form.password} 
+                onChange={handleChange} 
+                error={fieldErrors.password}
+                required 
+              />
             </div>
             <div className="col-md-6">
-              <InputField id="passwordConfirmation" name="passwordConfirmation" label="Confirm Password" type="password" placeholder="Confirm password" value={form.passwordConfirmation} onChange={handleChange} required />
+              <InputField 
+                id="passwordConfirmation" 
+                name="passwordConfirmation" 
+                label="Confirm Password" 
+                type="password" 
+                placeholder="Confirm password" 
+                value={form.passwordConfirmation} 
+                onChange={handleChange} 
+                error={fieldErrors.passwordConfirmation}
+                required 
+              />
             </div>
           </div>
 
