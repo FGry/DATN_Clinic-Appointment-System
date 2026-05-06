@@ -21,7 +21,6 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <aside className="bg-white border-end position-fixed top-0 start-0 vh-100 d-flex flex-column" style={{ width: '260px', zIndex: 1040 }}>
         <div className="p-4 pt-4 mb-3">
           <h4 className="fw-bolder text-primary mb-1 font-manrope">MedClinic Admin</h4>
-          <p className="text-muted small mb-0">Management Portal</p>
         </div>
         
         <nav className="nav flex-column flex-grow-1 px-3 gap-1">
@@ -52,12 +51,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <div className="flex-grow-1 d-flex flex-column" style={{ marginLeft: '260px' }}>
         {/* Top App Bar */}
         <header className="bg-white border-bottom position-sticky top-0 d-flex justify-content-between align-items-center px-4 py-3 shadow-sm" style={{ zIndex: 1030 }}>
-          <div className="input-group" style={{ maxWidth: '400px' }}>
-            <span className="input-group-text bg-light border-0 text-muted rounded-start-pill ps-4">
-              <i className="bi bi-search"></i>
-            </span>
-            <input type="text" className="form-control bg-light border-0 rounded-end-pill py-2 focus-ring-none" placeholder="Search staff, doctors or records..." />
-          </div>
+          <div className="bg-light rounded-pill" style={{ width: '400px', height: '40px' }}></div>
 
           <div className="d-flex align-items-center gap-4">
             <button className="btn btn-light rounded-circle p-2 d-flex position-relative">

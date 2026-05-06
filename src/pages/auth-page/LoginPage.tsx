@@ -32,7 +32,19 @@ export const LoginPage: React.FC = () => {
     try {
       const response = await authService.login(form);
       authService.saveSession(response);
-      navigate('/patient');
+      
+      const session = authService.getSession();
+      const role = session?.role;
+
+      if (role === 'ROLE_ADMIN') {
+        navigate('/admin');
+      } else if (role === 'ROLE_DOCTOR') {
+        navigate('/doctor');
+      } else if (role === 'ROLE_RECEPTIONIST') {
+        navigate('/reception');
+      } else {
+        navigate('/patient');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please check your username and password.');
     } finally {
@@ -59,7 +71,7 @@ export const LoginPage: React.FC = () => {
             name="username"
             label="Username"
             type="text"
-            placeholder="rewuindy1121"
+            placeholder="Enter your username"
             value={form.username}
             onChange={handleChange}
             required
