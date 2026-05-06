@@ -29,6 +29,7 @@ export type LoginResponse = {
     refreshToken: string;
     username: string;
     userId: number;
+    role: string;
   };
 };
 
@@ -37,6 +38,8 @@ const AUTH_STORAGE_KEY = 'auth';
 type AuthSession = {
   username: string;
   userId: number;
+  accessToken: string;
+  role: string;
 };
 
 export const authService = {
@@ -70,11 +73,25 @@ export const authService = {
       body: payload,
     }),
   saveSession: (response: LoginResponse) => {
+    let role = response.data.role;
+
+    // Fallback: If role is not in the response body, try to decode it from the token
+    if (!role && response.data.accessToken) {
+      try {
+        const payload = JSON.parse(atob(response.data.accessToken.split('.')[1]));
+        role = payload.role;
+      } catch (e) {
+        console.error('Failed to decode role from token', e);
+      }
+    }
+
     localStorage.setItem(
       AUTH_STORAGE_KEY,
       JSON.stringify({
         username: response.data.username,
         userId: response.data.userId,
+        accessToken: response.data.accessToken,
+        role: role,
       } satisfies AuthSession),
     );
   },

@@ -1,3 +1,4 @@
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
 export class ApiError extends Error {
@@ -19,13 +20,32 @@ type RequestOptions = {
 };
 
 export const apiRequest = async <T>(path: string, options: RequestOptions = {}): Promise<T> => {
+  const authKey = 'auth';
+  const rawSession = localStorage.getItem(authKey);
+  let accessToken = '';
+  
+  if (rawSession) {
+    try {
+      const session = JSON.parse(rawSession);
+      accessToken = session.accessToken;
+    } catch (e) {
+      console.error('Failed to parse auth session', e);
+    }
+  }
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+
+  if (accessToken) {
+    (headers as Record<string, string>)['Authorization'] = `Bearer ${accessToken}`;
+  }
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: options.method ?? 'GET',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
     body: options.body === undefined ? undefined : JSON.stringify(options.body),
   });
 
@@ -36,10 +56,11 @@ export const apiRequest = async <T>(path: string, options: RequestOptions = {}):
     const message =
       typeof data === 'object' && data !== null && 'message' in data
         ? String((data as { message: unknown }).message)
-        : `Something went wrong(email, otp or password)`;
+        : `Something went wrong`;
 
     throw new ApiError(message, response.status, data);
   }
 
   return data as T;
 };
+
