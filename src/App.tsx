@@ -22,6 +22,8 @@ import { AdminReceptionistsPage } from './pages/admin-page/AdminReceptionistsPag
 import { AdminSpecialtiesPage } from './pages/admin-page/AdminSpecialtiesPage';
 import { AdminPatientsPage } from './pages/admin-page/AdminPatientsPage';
 import { AdminDashboardPage } from './pages/admin-page/AdminDashboardPage';
+import { ResetPasswordPage } from './pages/auth-page/ResetPasswordPage';
+import { VerifyOtpPage } from './pages/auth-page/VerifyPage';
 
 function App() {
   return (
@@ -53,6 +55,8 @@ function App() {
         <Route path="/admin/patients" element={<AdminPatientsPage />} />
         <Route path="/admin/receptionists" element={<AdminReceptionistsPage />} />
         <Route path="/admin/specialties" element={<AdminSpecialtiesPage />} />
+        <Route path="/verify-otp" element={<VerifyOtpPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="*" element={
           <div className="flex justify-center items-center h-screen text-2xl font-bold">
             404 - Không tìm thấy trang

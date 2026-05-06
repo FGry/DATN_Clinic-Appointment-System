@@ -54,6 +54,21 @@ export const authService = {
     apiRequest<unknown>('/api/auth/logout', {
       method: 'POST',
     }),
+  forgotPassword: (email: string) =>
+    apiRequest<unknown>('/api/auth/forgot-password', {
+      method: 'POST',
+      body: { email },
+    }),
+  verifyOtp: (payload: { email: string; otp: string }) =>
+    apiRequest<unknown>('/api/auth/verify-otp', {
+      method: 'POST',
+      body: payload,
+    }),
+  resetPassword: (payload: { email: string; newPassword: string }) =>
+    apiRequest<unknown>('/api/auth/reset-password', {
+      method: 'POST',
+      body: payload,
+    }),
   saveSession: (response: LoginResponse) => {
     localStorage.setItem(
       AUTH_STORAGE_KEY,

@@ -36,7 +36,7 @@ export const apiRequest = async <T>(path: string, options: RequestOptions = {}):
     const message =
       typeof data === 'object' && data !== null && 'message' in data
         ? String((data as { message: unknown }).message)
-        : `Request failed with status ${response.status}`;
+        : `Something went wrong(email, otp or password)`;
 
     throw new ApiError(message, response.status, data);
   }
