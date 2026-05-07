@@ -188,6 +188,13 @@ export const AdminSpecialtiesPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="border-top-0">
+                {loading && (
+                  <tr>
+                    <td colSpan={3} className="text-center py-4 text-muted">
+                      Loading specialties...
+                    </td>
+                  </tr>
+                )}
                 {currentSpecialties.map((specialty) => (
                   <tr key={specialty.id}>
                     <td className="px-4 py-3">
@@ -219,7 +226,7 @@ export const AdminSpecialtiesPage: React.FC = () => {
                     </td>
                   </tr>
                 ))}
-                {currentSpecialties.length === 0 && (
+                {!loading && currentSpecialties.length === 0 && (
                   <tr>
                     <td colSpan={3} className="text-center py-4 text-muted">
                       No specialties found.
