@@ -4,118 +4,71 @@ import { InputField } from '../../components/common/InputField';
 import { Button } from '../../components/common/Button';
 import { authService } from '../../services/authService';
 
-type ResetLocationState = {
-  email?: string;
-};
-
 export const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const locationState = (location.state as ResetLocationState | null) ?? {};
-  const email = locationState.email ?? '';
+  const email = (location.state as any)?.email || '';
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!email) {
-    navigate('/forgot-password');
-  }
-
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
-      return;
-    }
-
+    if (password !== confirmPassword) { setError("Passwords do not match."); return; }
+    if (password.length < 8) { setError("Password must be at least 8 characters."); return; }
     setError('');
-
     setIsLoading(true);
-
-    authService
-      .resetPassword({ email, newPassword: password })
-      .then(() => {
-        alert('Password updated successfully! Please login again.');
-        navigate('/login');
-      })
-      .catch((err: any) => {
-        console.error(err);
-        setError((err && err.message) || 'Failed to reset password');
-      })
+    authService.resetPassword({ email, newPassword: password })
+      .then(() => { alert("Success!"); navigate('/login'); })
+      .catch((err) => setError(err?.message || 'Failed.'))
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 p-4 font-body-md" style={{ background: 'radial-gradient(circle at top right, #f2f3fc 0%, #f9f9ff 100%)' }}>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center p-4" style={{ backgroundColor: '#f2f3fc' }}>
       <main className="w-100" style={{ maxWidth: '440px' }}>
-        <div className="bg-white rounded-4 shadow-sm p-4 p-md-5 d-flex flex-column align-items-center border">
-          
-          {/* Brand Identity */}
-          <div className="mb-4">
-            <span className="text-primary font-manrope fw-bolder fs-3 tracking-tighter">HealthSync</span>
-          </div>
-
-          {/* Title and Subtext */}
+        <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
           <div className="text-center mb-5">
-            <h2 className="font-manrope fw-bold text-dark mb-2">Reset Password</h2>
-            <p className="text-muted mb-0">Enter your new password below.</p>
+            <h2 className="fw-bold text-st-primary" style={{ color: '#001835' }}>Reset Password</h2>
+            <p className="text-muted small">Enter your new secure password</p>
           </div>
 
-          {/* Reset Password Form */}
-            <form className="w-100" onSubmit={handleResetPassword}>
+          <form onSubmit={handleResetPassword}>
             <InputField 
               id="new_password" 
               label="New Password" 
               type="password" 
-              placeholder="Min. 8 characters"
+              icon="lock"
+              placeholder="Minimum 8 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            
-            <div className="mt-4">
+            <div className="mt-3">
               <InputField 
                 id="confirm_password" 
                 label="Confirm New Password" 
                 type="password" 
+                icon="shield-check"
                 placeholder="Re-enter password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                error={error} // Truyền error message xuống InputField
+                error={error}
                 required
               />
             </div>
 
-            {error && <div className="alert alert-danger mt-3">{error}</div>}
-
-            {/* Submit Button */}
-            <div className="mt-4 pt-2">
-              <Button type="submit" fullWidth className="py-3 shadow-sm d-flex align-items-center justify-content-center gap-2" disabled={isLoading}>
-                {isLoading ? 'Updating...' : 'Update Password'}
-              </Button>
-            </div>
+            <Button type="submit" fullWidth className="btn-st-primary mt-4 py-3 fw-bold shadow-sm" disabled={isLoading}>
+              {isLoading ? 'Updating...' : 'Update Password'}
+            </Button>
           </form>
 
-          {/* Back to Login Navigation */}
-          <div className="mt-5 text-center">
-            <Link to="/login" className="d-inline-flex align-items-center gap-2 text-primary fw-bold text-decoration-none hover-underline">
-              <i className="bi bi-arrow-left fs-5"></i> Back to Login
+          <div className="mt-5 text-center pt-4 border-top">
+            <Link to="/login" className="text-st-primary fw-bold text-decoration-none small d-inline-flex align-items-center gap-2">
+              <i className="bi bi-arrow-left"></i> Back to Login
             </Link>
           </div>
-        </div>
-
-        {/* Security Assurance Footer */}
-        <div className="mt-4 text-center">
-          <p className="small text-muted d-flex items-center justify-content-center gap-2">
-            <i className="bi bi-lock-fill"></i> Secure clinical-grade encryption
-          </p>
         </div>
       </main>
     </div>
