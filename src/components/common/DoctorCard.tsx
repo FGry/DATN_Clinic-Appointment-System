@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Doctor } from '../../types/models/Doctor';
 import { useNavigate } from 'react-router-dom';
-import { Button } from './Button';
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -10,19 +9,20 @@ interface DoctorCardProps {
 export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
   const navigate = useNavigate();
   return (
-    <div className="card h-100 shadow-sm border-0">
-      <img src={doctor.imageUrl} className="card-img-top object-fit-cover" alt={doctor.name} style={{ height: '200px' }} />
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title fw-bold">{doctor.name}</h5>
-        <p className="card-text text-muted mb-2">{doctor.specialty}</p>
-        <div className="d-flex align-items-center text-muted mb-4">
-          <i className="bi bi-clock fs-6 me-2"></i>
-          <small>{doctor.schedule}</small>
-        </div>
-        <div className="mt-auto">
-          <Button variant="outline" fullWidth onClick={() => navigate('/login')}>Login to Book</Button>
-        </div>
+    <div className="card h-100 border-0 shadow-sm p-4 text-center hover-border-st-secondary transition-all" style={{ borderRadius: '1rem' }}>
+      <div className="position-relative mx-auto mb-4" style={{ width: '160px', height: '160px' }}>
+        <div className="position-absolute w-100 h-100 rounded-circle border border-2 border-opacity-25" style={{ borderColor: 'var(--st-secondary)' }}></div>
+        <img className="w-100 h-100 object-fit-cover rounded-circle p-1" src={doctor.imageUrl} alt={doctor.name} />
       </div>
+      <h3 className="fs-4 fw-semibold text-st-primary mb-1">{doctor.name}</h3>
+      <p className="small fw-bold text-st-secondary text-uppercase tracking-wider mb-3">{doctor.specialty}</p>
+      <p className="text-muted mb-4 flex-grow-1">{doctor.schedule || "Specializing in comprehensive and preventative care."}</p>
+      <button 
+        className="btn btn-st-primary w-100 fs-5 fw-semibold py-2 rounded-3 mt-auto"
+        onClick={() => navigate('/login')}
+      >
+        Login to Book
+      </button>
     </div>
   );
 };

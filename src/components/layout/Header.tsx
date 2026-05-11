@@ -1,27 +1,45 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../common/Button';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
-      <div className="container">
-        <Link to="/" className="navbar-brand fw-bold text-primary fs-4">MedClinic</Link>
+    <header className="fixed-top bg-white shadow-sm">
+      <nav className="navbar navbar-expand-md py-3 container">
+        {/* Brand */}
+        <Link to="/" className="navbar-brand fs-3 fw-bold text-st-primary mb-0">
+          St. Jude Medical
+        </Link>
         
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 fw-medium">
-            <li className="nav-item"><Link to="/doctors" className="nav-link">Doctors</Link></li>
-            <li className="nav-item"><Link to="/department/cardiology" className="nav-link">Specialties</Link></li>
+        {/* Navigation Links */}
+        <div className="collapse navbar-collapse justify-content-center">
+          <ul className="navbar-nav gap-4">
+            <li className="nav-item">
+              <Link to="/doctors" className="nav-link fs-5 fw-semibold text-secondary hover-text-st-secondary transition-colors">Doctors</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/department/cardiology" className="nav-link fs-5 fw-semibold text-secondary hover-text-st-secondary transition-colors">Specialties</Link>
+            </li>
           </ul>
         </div>
-
-        <div className="d-flex gap-2">
-          <Button variant="text" onClick={() => navigate('/login')}>Login</Button>
-          <Button variant="primary" onClick={() => navigate('/register')}>Register</Button>
+        
+        {/* Auth Buttons */}
+        <div className="d-flex align-items-center gap-3">
+          <button 
+            onClick={() => navigate('/login')}
+            className="btn fs-5 fw-semibold text-st-primary"
+          >
+            Login
+          </button>
+          <button 
+            onClick={() => navigate('/register')}
+            className="btn btn-st-primary fs-5 fw-semibold px-4 rounded-3"
+          >
+            Register
+          </button>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };

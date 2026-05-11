@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Import các Pages đã tạo
 import { LoginPage } from './pages/auth-page/LoginPage';
 import { DepartmentPage } from './pages/home-page/DepartmentPage';
+
 // Giả sử bạn đã tạo các file này tương tự cấu trúc tôi đã hướng dẫn
 import { RegisterPage } from './pages/auth-page/RegisterPage'; 
 import { ForgotPasswordPage } from './pages/auth-page/ForgotPasswordPage';

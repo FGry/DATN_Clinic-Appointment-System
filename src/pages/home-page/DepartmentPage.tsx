@@ -1,39 +1,33 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Header } from '../../components/layout/Header';
-import { DoctorCard } from '../../components/common/DoctorCard';
-import type { Doctor } from '../../types/models/Doctor';
-
-const departmentDoctors: Doctor[] = [
-  { id: '1', name: 'Dr. James Wilson', specialty: 'Cardiologist', schedule: 'Mon - Fri: 08:00 AM - 04:00 PM', imageUrl: 'https://placehold.co/400x300' },
-  { id: '2', name: 'Dr. Sarah Chen', specialty: 'Pediatrician', schedule: 'Mon - Fri: 08:00 AM - 04:00 PM', imageUrl: 'https://placehold.co/400x300' },
-  { id: '3', name: 'Dr. Michael Ross', specialty: 'Neurologist', schedule: 'Mon - Fri: 08:00 AM - 04:00 PM', imageUrl: 'https://placehold.co/400x300' }
-];
 
 export const DepartmentPage: React.FC = () => {
-  return (
-    <div className="d-flex flex-column min-vh-100 bg-white">
-      <Header />
-      
-      <main className="container flex-grow-1 py-5">
-        <div className="mb-5">
-          <Link to="/" className="text-decoration-none fw-semibold d-inline-flex align-items-center gap-2 text-primary">
-            <i className="bi bi-arrow-left fs-5"></i>
-            Back to Home
-          </Link>
-        </div>
+  const specialties = [
+    { name: 'Cardiology', icon: 'cardiology', desc: 'Expert care for heart health and cardiovascular systems.' },
+    { name: 'Neurology', icon: 'neurology', desc: 'Advanced diagnostics and treatment for the nervous system.' },
+    { name: 'Orthopedics', icon: 'orthopedics', desc: 'Surgical and non-surgical care for musculoskeletal issues.' },
+    { name: 'Pediatrics', icon: 'child_care', desc: 'Compassionate medical care for children and adolescents.' },
+  ];
 
-        <div className="mb-5" style={{ maxWidth: '800px' }}>
-          <h1 className="display-5 fw-bold mb-3 text-dark">Cardiology Department</h1>
-          <p className="lead text-muted" style={{ lineHeight: '1.8' }}>
-            Our cardiology department provides comprehensive care for heart-related conditions, utilizing the latest diagnostic tools and treatment options. We are dedicated to delivering excellence in cardiac health through prevention, diagnosis, and advanced therapeutic interventions.
-          </p>
+  return (
+    <div className="bg-light min-vh-100 font-manrope">
+      <Header />
+      <main className="container py-5" style={{ paddingTop: '120px' }}>
+        <div className="text-center mb-5">
+          <span className="text-st-secondary fw-bold text-uppercase tracking-widest">Our Expertise</span>
+          <h1 className="display-4 fw-bold text-st-primary mt-2">Medical Specialties</h1>
         </div>
 
         <div className="row g-4">
-          {departmentDoctors.map(doctor => (
-            <div key={doctor.id} className="col-12 col-md-6 col-lg-4">
-              <DoctorCard doctor={doctor} />
+          {specialties.map((spec, index) => (
+            <div key={index} className="col-md-6 col-lg-3">
+              <div className="card h-100 border-0 shadow-sm p-4 rounded-4 hover-border-st-secondary transition-all cursor-pointer">
+                <div className="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style={{ width: '60px', height: '60px' }}>
+                  <span className="material-symbols-outlined text-st-primary fs-2">{spec.icon}</span>
+                </div>
+                <h4 className="fw-bold text-st-primary mb-2">{spec.name}</h4>
+                <p className="text-muted mb-0">{spec.desc}</p>
+              </div>
             </div>
           ))}
         </div>

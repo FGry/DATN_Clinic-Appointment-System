@@ -1,0 +1,46 @@
+/* src/index.css */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root {
+  --st-primary: #001835;
+  --st-secondary: #006a6a;
+  --st-text: #43474e;
+  --st-bg-light: #edeeef;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Custom Utilities */
+.text-st-primary { color: var(--st-primary) !important; }
+.text-st-secondary { color: var(--st-secondary) !important; }
+.bg-st-primary { background-color: var(--st-primary) !important; }
+.bg-st-secondary { background-color: var(--st-secondary) !important; }
+.bg-st-light { background-color: var(--st-bg-light) !important; }
+
+.btn-st-primary {
+  background-color: var(--st-primary);
+  color: white;
+  border: none;
+}
+.btn-st-primary:hover {
+  background-color: #002855;
+  color: white;
+}
+
+.btn-st-secondary {
+  background-color: var(--st-secondary);
+  color: white;
+  border: none;
+}
+.btn-st-secondary:hover {
+  background-color: #008a8a;
+  color: white;
+}
+
+.hover-border-st-secondary:hover {
+  border-color: var(--st-secondary) !important;
+}
