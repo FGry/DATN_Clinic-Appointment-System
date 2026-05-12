@@ -5,68 +5,92 @@ import { Link } from 'react-router-dom';
 export const PatientAppointmentDetailsPage: React.FC = () => {
   return (
     <PatientLayout>
-      <div className="mx-auto" style={{ maxWidth: '900px' }}>
+      <div className="mx-auto font-manrope" style={{ maxWidth: '900px' }}>
         {/* Header */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5">
           <div>
-            <h2 className="fw-bolder font-manrope text-dark mb-2">Appointment Details</h2>
+            <h2 className="fw-bolder mb-1" style={{ color: '#001835' }}>Appointment Details</h2>
             <p className="text-muted mb-0">Review your upcoming medical consultation information.</p>
           </div>
-          <Link to="/patient/appointments" className="btn btn-link text-primary fw-bold text-decoration-none d-flex align-items-center gap-2 px-0">
+          <Link to="/patient/appointments" className="btn btn-link fw-bold text-decoration-none d-flex align-items-center gap-2 px-0 hover-opacity" style={{ color: '#006a6a' }}>
             <i className="bi bi-arrow-left"></i> Back to List
           </Link>
         </div>
 
         {/* Detail Card */}
-        <div className="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+        <div className="card border-0 shadow-sm rounded-4 overflow-hidden position-relative bg-white">
           {/* Top Status Bar */}
           <div className="card-header bg-white border-bottom p-4 p-md-5 d-flex justify-content-between align-items-center">
             <div>
-              <p className="text-muted fw-bold text-uppercase mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Appointment ID</p>
-              <h4 className="fw-bolder font-manrope text-dark m-0">#APT-20231024-089</h4>
+              <p className="text-muted fw-bold text-uppercase mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Status</p>
+              <span className="badge rounded-pill px-3 py-2 fw-bold text-success bg-success-subtle d-inline-flex align-items-center gap-2">
+                <span className="bg-success rounded-circle" style={{ width: '6px', height: '6px' }}></span> Upcoming
+              </span>
             </div>
-            <div className="bg-light text-secondary rounded-pill px-4 py-2 d-flex align-items-center gap-2 border">
-              <span className="bg-secondary rounded-circle" style={{ width: '8px', height: '8px' }}></span>
-              <span className="fw-bold small">Completed</span>
+            <div className="text-end">
+              <p className="text-muted fw-bold text-uppercase mb-1" style={{ fontSize: '11px', letterSpacing: '1px' }}>Reference ID</p>
+              <span className="fw-bold" style={{ color: '#001835' }}>#APT-847291</span>
             </div>
           </div>
 
           <div className="card-body p-4 p-md-5">
             <div className="row g-5">
-              {/* Practitioner */}
-              <div className="col-md-6 d-flex gap-4">
-                <div className="bg-light border rounded-4 d-flex align-items-center justify-content-center text-primary flex-shrink-0" style={{ width: '64px', height: '64px' }}>
-                  <i className="bi bi-heart-pulse fs-3"></i>
+              {/* Doctor & Dept Info */}
+              <div className="col-md-6 border-end-md">
+                <p className="text-muted fw-bold text-uppercase mb-3" style={{ fontSize: '11px', letterSpacing: '1px' }}>Medical Professional</p>
+                <div className="d-flex align-items-center gap-3 mb-4">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white fs-4 shadow-sm" style={{ width: '64px', height: '64px', backgroundColor: '#001835' }}>
+                    SM
+                  </div>
+                  <div>
+                    <h5 className="fw-bold mb-1" style={{ color: '#001835' }}>Dr. Sarah Mitchell</h5>
+                    <span className="badge bg-light text-muted border px-2 py-1 fw-medium">Cardiology Department</span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-muted small fw-semibold mb-1">Practitioner</p>
-                  <h5 className="fw-bold font-manrope text-dark mb-2">Dr. Alexander Bennett</h5>
-                  <span className="badge bg-primary-subtle text-primary px-3 py-1">Cardiology</span>
+
+                <div className="mt-4">
+                  <p className="text-muted fw-bold text-uppercase mb-2" style={{ fontSize: '11px', letterSpacing: '1px' }}>Reason for Visit</p>
+                  <p className="fw-medium text-dark mb-0 bg-light p-3 rounded-3">Routine heart checkup and blood pressure monitoring.</p>
                 </div>
               </div>
 
-              {/* Date & Time */}
-              <div className="col-md-6 d-flex gap-4">
-                <div className="bg-light border rounded-4 d-flex align-items-center justify-content-center text-primary flex-shrink-0" style={{ width: '64px', height: '64px' }}>
-                  <i className="bi bi-calendar-event fs-3"></i>
-                </div>
-                <div>
-                  <p className="text-muted small fw-semibold mb-1">Date & Time</p>
-                  <h5 className="fw-bold font-manrope text-dark mb-1">09:00 AM</h5>
-                  <p className="text-muted mb-0">Thứ 3, 24/10/2023</p>
+              {/* Time & Location */}
+              <div className="col-md-6 ps-md-4">
+                <p className="text-muted fw-bold text-uppercase mb-3" style={{ fontSize: '11px', letterSpacing: '1px' }}>Schedule Information</p>
+                <div className="d-flex flex-column gap-4">
+                  <div className="d-flex gap-3 align-items-start">
+                    <div className="bg-light rounded-circle d-flex align-items-center justify-content-center mt-1" style={{ width: '40px', height: '40px' }}>
+                      <i className="bi bi-calendar-event fs-5" style={{ color: '#006a6a' }}></i>
+                    </div>
+                    <div>
+                      <p className="text-muted small fw-bold mb-0">Date</p>
+                      <p className="fw-bold fs-5 mb-0" style={{ color: '#001835' }}>October 24, 2023</p>
+                    </div>
+                  </div>
+                  <div className="d-flex gap-3 align-items-start">
+                    <div className="bg-light rounded-circle d-flex align-items-center justify-content-center mt-1" style={{ width: '40px', height: '40px' }}>
+                      <i className="bi bi-clock fs-5" style={{ color: '#006a6a' }}></i>
+                    </div>
+                    <div>
+                      <p className="text-muted small fw-bold mb-0">Time</p>
+                      <p className="fw-bold fs-5 mb-0" style={{ color: '#001835' }}>10:00 AM - 10:30 AM</p>
+                    </div>
+                  </div>
+                  <div className="d-flex gap-3 align-items-start">
+                    <div className="bg-light rounded-circle d-flex align-items-center justify-content-center mt-1" style={{ width: '40px', height: '40px' }}>
+                      <i className="bi bi-geo-alt fs-5" style={{ color: '#006a6a' }}></i>
+                    </div>
+                    <div>
+                      <p className="text-muted small fw-bold mb-0">Location</p>
+                      <p className="fw-bold mb-0 text-dark">St. Jude Medical Center</p>
+                      <small className="text-muted d-block">Building A, Floor 3, Room 302</small>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {/* Reason */}
-              <div className="col-12">
-                <div className="bg-light border rounded-3 p-4">
-                  <p className="text-muted small fw-semibold mb-2">Reason for Visit</p>
-                  <p className="fw-medium text-dark mb-0">Monthly Regular Check-up</p>
-                </div>
-              </div>
-
-              {/* Message from clinic */}
-              <div className="col-12">
+              
+              {/* Important Notice */}
+              <div className="col-12 mt-2">
                 <div className="bg-warning-subtle border-start border-4 border-warning rounded-end-3 p-4 d-flex gap-3">
                   <i className="bi bi-info-circle-fill text-warning fs-5"></i>
                   <div>
@@ -79,17 +103,16 @@ export const PatientAppointmentDetailsPage: React.FC = () => {
           </div>
 
           {/* Card Footer Actions */}
-          <div className="card-footer bg-light border-top p-4 p-md-5 d-flex flex-wrap gap-3 justify-content-end">
-            <button className="btn btn-outline-secondary fw-bold px-4 py-2 rounded-3 d-flex align-items-center gap-2 bg-white">
+          <div className="card-footer bg-light bg-opacity-50 border-top p-4 p-md-5 d-flex flex-wrap gap-3 justify-content-end">
+            <button className="btn btn-outline-secondary fw-bold px-4 py-2.5 rounded-3 d-flex align-items-center gap-2 bg-white transition-all active-scale">
               <i className="bi bi-download"></i> Download Summary
             </button>
-            <button className="btn btn-primary fw-bold px-4 py-2 rounded-3 shadow-sm">
-              View Results
+            <button className="btn btn-outline-danger fw-bold px-4 py-2.5 rounded-3 bg-white transition-all active-scale">
+              Cancel Appointment
+            </button> 
+            <button className="btn text-white fw-bold px-4 py-2.5 rounded-3 shadow-sm transition-all active-scale" style={{ backgroundColor: '#001835' }}>
+              Reschedule
             </button>
-            {/* Nếu lịch hẹn chưa hoàn thành thì hiện nút: 
-              <button className="btn btn-outline-danger fw-bold px-4 py-2 rounded-3 bg-white">Cancel Appointment</button> 
-              <button className="btn btn-primary fw-bold px-4 py-2 rounded-3 shadow-sm">Reschedule</button> 
-            */}
           </div>
         </div>
       </div>
