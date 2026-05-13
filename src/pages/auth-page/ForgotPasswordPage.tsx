@@ -46,7 +46,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <form onSubmit={handleVerify}>
                 <InputField id="email" label="Email Address" type="email" icon="envelope" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 {error && <div className="alert alert-danger py-2 small fw-bold">{error}</div>}
-                <Button type="submit" fullWidth className="btn-st-primary mt-3 py-3 fw-bold" disabled={isLoading} style={{ backgroundColor: '#001835', border: 'none' }}>
+                <Button type="submit" fullWidth className="mt-4 shadow-sm" disabled={isLoading}>
                   {isLoading ? 'Sending...' : 'Send OTP Code'}
                 </Button>
               </form>

@@ -111,7 +111,7 @@ export const RegisterPage: React.FC = () => {
                   <div className="col-md-6 mt-3"><InputField id="password" name="password" label="Password" type="password" value={form.password} onChange={handleChange} error={fieldErrors.password} required /></div>
                   <div className="col-md-6 mt-3"><InputField id="passwordConfirmation" name="passwordConfirmation" label="Confirm Password" type="password" value={form.passwordConfirmation} onChange={handleChange} error={fieldErrors.passwordConfirmation} required /></div>
                 </div>
-                <Button type="submit" fullWidth className="btn-st-primary mt-4 py-3 fw-bold" disabled={isSubmitting} style={{ backgroundColor: '#001835', border: 'none' }}>
+                <Button type="submit" fullWidth className="mt-4 shadow-sm" disabled={isSubmitting}>
                   Complete Registration
                 </Button>
               </form>

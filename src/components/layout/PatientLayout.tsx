@@ -53,10 +53,9 @@ export const PatientLayout: React.FC<PatientLayoutProps> = ({ children, onOpenBo
             <div className="mt-4 px-2">
               <button 
                 onClick={onOpenBookingModal}
-                className="btn w-100 fw-bold py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 bg-white transition-all active-scale"
-                style={{ color: '#001835' }}
+                className="btn btn-st-secondary w-100 fw-semibold py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 shadow-sm transition-all active-scale"
               >
-                <i className="bi bi-plus-circle-fill fs-5" style={{ color: '#006a6a' }}></i> New Appointment
+                <i className="bi bi-plus-circle-fill"></i> New Appointment
               </button>
             </div>
           )}
@@ -90,7 +89,7 @@ export const PatientLayout: React.FC<PatientLayoutProps> = ({ children, onOpenBo
             <div className="border-start" style={{ height: '30px' }}></div>
             <div className="d-flex align-items-center gap-3 ps-2">
               <img src="https://placehold.co/100x100" alt="Profile" className="rounded-circle border border-2 border-white shadow-sm" style={{ width: '44px', height: '44px', objectFit: 'cover' }} />
-              <LogoutButton className="btn btn-outline-danger btn-sm fw-bold px-3 py-2 rounded-3 ms-2 transition-all active-scale" />
+              <LogoutButton className="ms-2 transition-all active-scale" />
             </div>
           </div>
         </header>
@@ -100,7 +99,6 @@ export const PatientLayout: React.FC<PatientLayoutProps> = ({ children, onOpenBo
         </main>
       </div>
 
-      {/* Common CSS */}
       <style>{`
         .bg-st-primary { background-color: #001835 !important; }
         .text-st-primary { color: #001835 !important; }

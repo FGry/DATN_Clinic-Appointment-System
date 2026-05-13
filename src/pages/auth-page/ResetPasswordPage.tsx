@@ -47,7 +47,7 @@ export const ResetPasswordPage: React.FC = () => {
               <form onSubmit={handleResetPassword}>
                 <InputField id="new_password" label="New Password" type="password" icon="lock" placeholder="Min. 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <InputField id="confirm_password" label="Confirm Password" type="password" icon="shield-check" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} error={error} required />
-                <Button type="submit" fullWidth className="btn-st-primary mt-4 py-3 fw-bold" disabled={isLoading} style={{ backgroundColor: '#001835', border: 'none' }}>
+                <Button type="submit" fullWidth className="mt-4 shadow-sm">
                   Update Password
                 </Button>
               </form>

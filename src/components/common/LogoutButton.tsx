@@ -11,7 +11,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ className = '', labe
   return (
     <button
       type="button"
-      className={`btn btn-outline-danger btn-sm d-flex align-items-center gap-2 fw-bold px-3 py-2 rounded-3 ${className}`}
+      className={`btn btn-st-secondary btn-sm fw-semibold py-2 px-3 d-flex align-items-center justify-content-center gap-2 rounded-3 ${className}`}
       onClick={logout}
       disabled={isLoggingOut}
       {...props}

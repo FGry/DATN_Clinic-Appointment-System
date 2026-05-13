@@ -70,34 +70,24 @@ export const LoginPage: React.FC = () => {
     <div className="container-fluid p-0 min-vh-100 d-flex font-manrope">
       <div className="row g-0 w-100">
         
-        {/* --- Cột Hình Ảnh Bên Trái (Giống y hệt file login.html) --- */}
+        {/* --- Cột Hình Ảnh Bên Trái --- */}
         <div className="col-lg-6 d-none d-lg-flex align-items-center justify-content-center p-5 position-relative bg-st-primary" style={{ backgroundColor: '#001835' }}>
-          {/* Hình ảnh lâm sàng chiếm toàn bộ diện tích */}
           <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDCIo9RtNA5AAvhsrb29-mY0IcoJK8YurmRPTGxknLgy8M1fRkFSfcme98aHvYbfCsNyIZTMHCe-EgeVftE8vQP0iLuFuXF1E7faEAzud-3qBtZcX4P_7u2b91WcKaKuzACkAsbcYf58qAxp_IO9o8EIarXsSfm8RB7JhdAuKlGIxG_btJJCf7KVYDuY5PYi46MgPrmc_wkJ2eGKQyNOyshiwc4DhR8NfQd45n-pZSxvhqsyTeho6IS8jet-sX0gpupYOarkNBuuPO" // Sử dụng hình ảnh bác sĩ/bệnh nhân phù hợp
-            className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-75" 
-            alt="PRECISION CARE FOR YOUR FAMILY'S FUTURE" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDCIo9RtNA5AAvhsrb29-mY0IcoJK8YurmRPTGxknLgy8M1fRkFSfcme98aHvYbfCsNyIZTMHCe-EgeVftE8vQP0iLuFuXF1E7faEAzud-3qBtZcX4P_7u2b91WcKaKuzACkAsbcYf58qAxp_IO9o8EIarXsSfm8RB7JhdAuKlGIxG_btJJCf7KVYDuY5PYi46MgPrmc_wkJ2eGKQyNOyshiwc4DhR8NfQd45n-pZSxvhqsyTeho6IS8jet-sX0gpupYOarkNBuuPO" className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-50" alt="Forgot Password" 
           />
-          
-          {/* Text tiêu đề lớn ở giữa hình ảnh */}
           <div className="position-relative z-1 text-center text-white px-4">
             <h1 className="display-3 fw-bold mb-3" style={{ lineHeight: '1.2' }}>
               PRECISION CARE<br/>FOR YOUR FAMILY'S FUTURE.
             </h1>
           </div>
-
-          {/* Text mô tả nhỏ ở góc dưới bên trái */}
           <div className="position-absolute bottom-0 start-0 w-100 p-5 text-start text-white z-1">
              <p className="text-white opacity-75 mb-0 max-w-500 small">
               Dedicated to your health, every step of the way. From diagnosis to recovery, we prioritize your family's well-being with compassionate care and advanced technology.
              </p>
           </div>
-
-          {/* Nút quay lại trang chủ ở góc trên cùng bên trái của hình ảnh */}
           <div className="position-absolute top-0 start-0 p-4 z-1">
             <Link to="/" className="text-decoration-none fw-bold d-inline-flex align-items-center gap-2 text-white hover-opacity">
-              <i className="bi bi-house-door-fill fs-5"></i>
-              Back to Home
+              <i className="bi bi-house-door-fill fs-5"></i> Back to Home
             </Link>
           </div>
         </div>
@@ -107,7 +97,6 @@ export const LoginPage: React.FC = () => {
           <main className="w-100" style={{ maxWidth: '440px' }}>
             <div className="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
               
-              {/* Thương hiệu HealthSync Portal */}
               <div className="text-center mb-5 d-flex flex-column align-items-center">
                  <div className="bg-st-primary rounded-circle d-flex align-items-center justify-content-center mb-3 shadow-sm" style={{ backgroundColor: '#001835', width: '60px', height: '60px' }}>
                     <span className="text-white fw-bolder fs-3 font-manrope">H</span>
@@ -117,7 +106,6 @@ export const LoginPage: React.FC = () => {
               </div>
 
               <form onSubmit={handleLogin}>
-                {/* Trường Username/Email */}
                 <InputField
                   id="username"
                   name="username"
@@ -130,7 +118,6 @@ export const LoginPage: React.FC = () => {
                   error={fieldErrors.username}
                 />
 
-                {/* Trường Password */}
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <label className="form-label fw-bold text-muted small mb-1" htmlFor="password">Password</label>
                   <Link to="/forgot-password" style={{ color: '#006a6a' }} className="text-decoration-none small fw-bold">Forgot password?</Link>
@@ -147,18 +134,16 @@ export const LoginPage: React.FC = () => {
                   error={fieldErrors.password}
                 />
 
-                {/* Nút Đăng nhập */}
+                {/* Đã cập nhật nút: Bỏ inline style background, giữ nguyên class margin/padding/shadow */}
                 <Button 
                   type="submit" 
                   fullWidth 
-                  className="btn-st-primary mt-4 py-3 fw-bold shadow-sm" 
+                  className="mt-4 shadow-sm" 
                   disabled={isSubmitting}
-                  style={{ backgroundColor: '#001835', border: 'none' }}
                 >
                   {isSubmitting ? 'Logging in...' : 'Sign In to Portal'}
                 </Button>
 
-                {/* Đăng nhập bằng mạng xã hội */}
                 {/* <div className="mt-4 pt-4 border-top">
                   <p className="text-center text-muted small mb-3">Or continue with</p>
                   <div className="d-flex gap-2">
@@ -174,14 +159,12 @@ export const LoginPage: React.FC = () => {
                 </div> */}
               </form>
 
-              {/* Link sang trang Đăng ký */}
               <div className="mt-4 text-center">
                 <p className="text-muted small mb-0 opacity-75">
                   Don't have a patient account? <Link to="/register" style={{ color: '#006a6a' }} className="text-decoration-none fw-bold">Register Now</Link>
                 </p>
               </div>
 
-              {/* Compliance text ở cuối */}
               {/* <div className="mt-5 pt-4 flex items-center justify-center gap-2 opacity-40 text-center" style={{ borderTop: '1px dashed #dee2e6' }}>
                  <span className="fw-bold text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>HIPAA Compliant</span>
                  <span className="mx-2 text-muted">|</span>

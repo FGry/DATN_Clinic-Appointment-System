@@ -48,7 +48,7 @@ export const VerifyOtpPage: React.FC = () => {
               <form onSubmit={handleVerifyOtp} className="mt-4">
                 <InputField id="otp" label="" type="text" placeholder="000000" className="text-center fs-4 tracking-widest fw-bold" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value)} required />
                 {error && <div className="alert alert-danger py-2 small fw-bold mt-2">{error}</div>}
-                <Button type="submit" fullWidth className="btn-st-primary mt-3 py-3 fw-bold" disabled={isLoading} style={{ backgroundColor: '#001835', border: 'none' }}>
+                <Button type="submit" fullWidth className="mt-4 shadow-sm" disabled={isLoading}>
                   {isLoading ? 'Verifying...' : 'Verify & Continue'}
                 </Button>
               </form>

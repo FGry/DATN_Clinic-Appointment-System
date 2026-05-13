@@ -77,7 +77,7 @@ export const DoctorLayout: React.FC<DoctorLayoutProps> = ({ children }) => {
                 <small className="fw-bold" style={{ color: '#006a6a', fontSize: '11px', textTransform: 'uppercase' }}>Cardiology</small>
               </div>
               <img src="https://placehold.co/100x100" alt="Profile" className="rounded-circle border border-2 border-white shadow-sm" style={{ width: '44px', height: '44px', objectFit: 'cover' }} />
-              <LogoutButton className="btn btn-outline-danger btn-sm fw-bold px-3 py-2 rounded-3 ms-2 transition-all active-scale" />
+              <LogoutButton className="ms-2 transition-all active-scale" />
             </div>
           </div>
         </header>
