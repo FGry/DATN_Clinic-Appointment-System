@@ -120,13 +120,13 @@ export const AdminDashboardPage: React.FC = () => {
               <h5 className="fw-bold font-manrope mb-4">Quick Actions</h5>
               <div className="d-flex flex-column gap-3">
                 <Link to="/admin/doctors" className="btn btn-outline-primary p-3 rounded-3 text-start fw-bold d-flex align-items-center gap-3">
-                  <i className="bi bi-person-plus fs-5"></i> Add New Doctor
+                  <i className="bi bi-plus-lg fs-5"></i> Add New Doctor
                 </Link>
                 <Link to="/admin/receptionists" className="btn btn-outline-primary p-3 rounded-3 text-start fw-bold d-flex align-items-center gap-3">
-                  <i className="bi bi-badge-ad fs-5"></i> Manage Reception Staff
+                  <i className="bi bi-plus-lg fs-5"></i> Manage Reception Staff
                 </Link>
                 <Link to="/admin/specialties" className="btn btn-outline-primary p-3 rounded-3 text-start fw-bold d-flex align-items-center gap-3">
-                  <i className="bi bi-tags fs-5"></i> Configure Specialties
+                  <i className="bi bi-plus-lg fs-5"></i> Configure Specialties
                 </Link>
               </div>
             </div>

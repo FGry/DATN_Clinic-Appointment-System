@@ -1,165 +1,253 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ReceptionLayout } from '../../components/layout/ReceptionLayout';
 import { Link } from 'react-router-dom';
+import { receptionistService, type DoctorScheduleResponse, type AdminDoctorResponse } from '../../services/receptionistService';
+import { ToastNotification } from '../../components/common/ToastNotification';
 
 export const ReceptionTimelinePage: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [doctors, setDoctors] = useState<AdminDoctorResponse[]>([]);
+  const [schedules, setSchedules] = useState<DoctorScheduleResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' as 'success' | 'error' });
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDate]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [docsData, schedulesData] = await Promise.all([
+        receptionistService.getDoctors(),
+        receptionistService.getAllSchedules()
+      ]);
+      setDoctors(docsData);
+      // Filter schedules for the selected date
+      setSchedules(schedulesData.filter(s => s.date === selectedDate));
+    } catch (error) {
+      console.error('Failed to fetch timeline data:', error);
+      setToast({ show: true, message: 'Failed to load timeline data', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00 (Lunch)', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+  const getShiftStyle = (start: string, end: string) => {
+    const startHour = parseInt(start.split(':')[0]);
+    const startMin = parseInt(start.split(':')[1]);
+    const endHour = parseInt(end.split(':')[0]);
+    const endMin = parseInt(end.split(':')[1]);
+    
+    const startTimeDecimal = startHour + startMin / 60;
+    const endTimeDecimal = endHour + endMin / 60;
+    
+    // We are showing from 08:00 to 18:00 (10 hours total)
+    const totalHours = 10;
+    const leftOffset = ((startTimeDecimal - 8) / totalHours) * 100;
+    const width = ((endTimeDecimal - startTimeDecimal) / totalHours) * 100;
+    
+    return {
+      left: `${leftOffset}%`,
+      width: `${width}%`,
+      backgroundColor: 'rgba(0, 106, 106, 0.1)',
+      color: '#006a6a',
+      borderLeft: `4px solid #006a6a`,
+      boxSizing: 'border-box' as const
+    };
+  };
+
+  const processShifts = (doctorSchedules: DoctorScheduleResponse[]) => {
+    const processed: { start: string, end: string, type: string }[] = [];
+    doctorSchedules.forEach(s => {
+      const startH = parseInt(s.startTime.split(':')[0]);
+      const endH = parseInt(s.endTime.split(':')[0]);
+      
+      // If shift spans across 12:00-13:00, split it
+      if (startH < 12 && endH > 12) {
+        processed.push({ start: s.startTime, end: '12:00', type: 'Morning' });
+        processed.push({ start: '13:00', end: s.endTime, type: 'Afternoon' });
+      } else {
+        processed.push({ start: s.startTime, end: s.endTime, type: startH < 12 ? 'Morning' : 'Afternoon' });
+      }
+    });
+    return processed;
+  };
+
+  const filteredDoctors = React.useMemo(() => {
+    const doctorIdsWithSchedules = new Set(schedules.map(s => s.doctorId));
+    return doctors.filter(doc => doctorIdsWithSchedules.has(doc.id));
+  }, [doctors, schedules]);
+
   return (
     <ReceptionLayout onOpenBookingModal={() => {}}>
-      <div className="mx-auto font-manrope" style={{ maxWidth: '1400px' }}>
-        
-        {/* Controls Bar */}
-        <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-          <div className="d-flex flex-wrap align-items-center gap-3">
-            {/* Date Picker */}
-            <div className="bg-white border px-4 py-2.5 rounded-3 d-flex align-items-center gap-3 shadow-sm cursor-pointer hover-border-st-secondary transition-all">
-              <i className="bi bi-calendar3 text-muted"></i>
-              <span className="fw-bolder" style={{ color: '#001835' }}>October 24, 2023</span>
-              <i className="bi bi-chevron-down text-muted small ms-2"></i>
+        <ToastNotification 
+          show={toast.show}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(prev => ({ ...prev, show: false }))}
+        />
+        <div className="mx-auto font-manrope animate-fade-in" style={{ maxWidth: '1400px' }}>
+          
+          {/* Page Header */}
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
+            <div>
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <span className="badge rounded-pill px-3 py-1 text-uppercase fw-bold" style={{ backgroundColor: 'rgba(0, 24, 53, 0.05)', color: '#001835', fontSize: '10px', letterSpacing: '1px' }}>Timeline View</span>
+              </div>
+              <h2 className="fw-bolder mb-1" style={{ color: '#001835', fontSize: '2.25rem' }}>Doctor Shift Timeline</h2>
+              <p className="text-muted mb-0 opacity-75">Visual overview of medical staff availability and shift distribution.</p>
             </div>
             
-            {/* Specialty Filter */}
-            <select className="form-select border shadow-sm py-2.5 fw-medium text-dark bg-white" style={{ width: 'auto', minWidth: '200px' }}>
-              <option>All Specialties</option>
-              <option>General Practice</option>
-              <option>Cardiology</option>
-              <option>Pediatrics</option>
-            </select>
-          </div>
-
-          {/* View Toggle */}
-          <div className="bg-light p-1 rounded-3 d-flex border shadow-sm">
-            <Link to="/reception/schedule/list" className="btn btn-sm btn-light text-muted border-0 px-4 fw-bold hover-bg-white transition-all">
-              <i className="bi bi-list-ul me-2"></i> List View
-            </Link>
-            <button className="btn btn-sm bg-white text-dark shadow-sm px-4 fw-bold" style={{ color: '#001835' }}>
-              <i className="bi bi-calendar-range me-2"></i> Timeline
-            </button>
-          </div>
-        </div>
-
-        {/* Stat Cards (Same layout as List Page) */}
-        <div className="row g-4 mb-4">
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4" style={{ borderColor: '#001835' }}>
-              <div className="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
-                <i className="bi bi-calendar-check-fill fs-4" style={{ color: '#001835' }}></i>
+            <div className="d-flex align-items-center gap-3">
+              <div className="bg-white p-1 rounded-3 d-flex border shadow-sm" style={{ height: '46px' }}>
+                <Link 
+                  to="/reception/schedule/list" 
+                  className="btn btn-sm text-muted border-0 px-4 fw-bold hover-bg-light transition-all rounded-2 d-flex align-items-center"
+                  style={{ fontSize: '14px' }}
+                >
+                  <i className="bi bi-list-ul me-2"></i> List
+                </Link>
+                <button 
+                  className="btn btn-sm px-4 fw-bold rounded-2 transition-all d-flex align-items-center" 
+                  style={{ backgroundColor: '#001835', color: 'white', fontSize: '14px' }}
+                >
+                  <i className="bi bi-calendar-range me-2"></i> Timeline
+                </button>
               </div>
-              <div>
-                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Total Slots</p>
-                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>24</h3>
+              <div className="bg-white border rounded-3 px-3 d-flex align-items-center shadow-sm gap-2" style={{ height: '46px' }}>
+                <i className="bi bi-calendar3 text-muted"></i>
+                <input 
+                  type="date" 
+                  className="border-0 fw-bold text-dark bg-transparent shadow-none focus-ring-none" 
+                  style={{ fontSize: '14px' }}
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                />
               </div>
             </div>
           </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4" style={{ borderColor: '#006a6a' }}>
-              <div className="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
-                <i className="bi bi-check-circle-fill fs-4" style={{ color: '#006a6a' }}></i>
-              </div>
-              <div>
-                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Completed</p>
-                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>08</h3>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4 border-warning">
-              <div className="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
-                <i className="bi bi-hourglass-split fs-4"></i>
-              </div>
-              <div>
-                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Remaining</p>
-                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>16</h3>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4 border-danger">
-              <div className="bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
-                <i className="bi bi-x-circle-fill fs-4"></i>
-              </div>
-              <div>
-                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Canceled</p>
-                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>0</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Timeline Grid */}
-        <div className="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-5">
-          <div className="d-flex overflow-auto">
-            {/* Doctors Column */}
-            <div className="bg-light border-end" style={{ width: '250px', minWidth: '250px' }}>
-              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '60px' }}>
-                <span className="fw-bold text-muted text-uppercase small" style={{ letterSpacing: '1px' }}>Doctors</span>
-              </div>
-              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '100px' }}>
-                <div className="d-flex align-items-center gap-3">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white shadow-sm" style={{ width: '40px', height: '40px', backgroundColor: '#001835' }}>SJ</div>
-                  <div>
-                    <h6 className="fw-bold mb-0" style={{ color: '#001835' }}>Dr. Sarah Jenkins</h6>
-                    <small className="text-muted">General Practice</small>
-                  </div>
+  
+          {/* Timeline Grid */}
+          <div className="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-5">
+            <div className="d-flex">
+              {/* Doctors Sidebar Column */}
+              <div className="bg-light border-end" style={{ width: '280px', minWidth: '280px' }}>
+                <div className="p-4 border-bottom d-flex align-items-center bg-white" style={{ height: '70px' }}>
+                  <span className="fw-bold text-muted text-uppercase small" style={{ letterSpacing: '1px' }}>Medical Staff</span>
                 </div>
-              </div>
-              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '100px' }}>
-                <div className="d-flex align-items-center gap-3">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white shadow-sm" style={{ width: '40px', height: '40px', backgroundColor: '#006a6a' }}>MC</div>
-                  <div>
-                    <h6 className="fw-bold mb-0" style={{ color: '#001835' }}>Dr. Michael Chen</h6>
-                    <small className="text-muted">Cardiology</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Time Grid */}
-            <div className="flex-grow-1 position-relative" style={{ minWidth: '800px' }}>
-              {/* Time Headers */}
-              <div className="d-flex border-bottom bg-white" style={{ height: '60px' }}>
-                {['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map((time, idx) => (
-                  <div key={idx} className="flex-grow-1 border-end p-2 text-center">
-                    <span className="text-muted fw-bold small">{time}</span>
+                {loading ? (
+                  <div className="p-4 text-center">Loading...</div>
+                ) : filteredDoctors.length === 0 ? (
+                  <div className="p-4 text-center text-muted small">No doctors scheduled</div>
+                ) : filteredDoctors.map((doc) => (
+                  <div key={doc.id} className="p-4 border-bottom d-flex align-items-center bg-white" style={{ height: '110px' }}>
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white shadow-sm" 
+                           style={{ width: '44px', height: '44px', backgroundColor: '#001835' }}>
+                        {doc.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h6 className="fw-bold mb-0" style={{ color: '#001835' }}>{doc.fullName}</h6>
+                        <small className="text-muted fw-medium">ID: #{doc.id}</small>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-
-              {/* Grid Lines Overlay */}
-              <div className="position-absolute top-0 bottom-0 w-100 d-flex pointer-events-none" style={{ marginTop: '60px' }}>
-                {[...Array(8)].map((_, idx) => (
-                  <div key={idx} className="flex-grow-1 border-end border-light"></div>
-                ))}
-              </div>
-
-              {/* Rows */}
-              <div className="position-relative border-bottom" style={{ height: '100px' }}>
-                {/* Appointment Blocks */}
-                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-white cursor-pointer hover-opacity transition-all" 
-                     style={{ left: '0%', width: '12.5%', backgroundColor: '#001835', zIndex: 10 }}>
-                  <small className="fw-bold d-block text-truncate">Alice Schmidt</small>
-                  <small className="opacity-75" style={{ fontSize: '10px' }}>09:00 - 10:00</small>
+  
+              {/* Time Slots Grid */}
+              <div className="flex-grow-1 position-relative">
+                {/* Time Headers */}
+                <div className="d-flex border-bottom bg-white position-relative" style={{ height: '70px' }}>
+                  {timeSlots.map((time, idx) => (
+                    <div key={idx} className="flex-grow-1 border-end position-relative" style={{ minWidth: 0 }}>
+                      <span 
+                        className="text-muted fw-bold position-absolute" 
+                        style={{ 
+                          fontSize: '11px', 
+                          top: '25px', 
+                          left: '-15px', 
+                          zIndex: 5,
+                          backgroundColor: 'white',
+                          padding: '0 5px'
+                        }}
+                      >
+                        {time}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-white cursor-pointer hover-opacity transition-all" 
-                     style={{ left: '18.75%', width: '12.5%', backgroundColor: '#006a6a', zIndex: 10 }}>
-                  <small className="fw-bold d-block text-truncate">Bob Martin</small>
-                  <small className="opacity-75" style={{ fontSize: '10px' }}>10:30 - 11:30</small>
+  
+                {/* Grid Rows */}
+                <div className="position-relative">
+                   {/* Vertical Grid Lines */}
+                  <div className="position-absolute top-0 bottom-0 w-100 d-flex pointer-events-none" style={{ zIndex: 0 }}>
+                    {timeSlots.map((_, idx) => (
+                      <div key={idx} className="flex-grow-1 border-end border-light"></div>
+                    ))}
+                  </div>
+  
+                  {/* Data Rows */}
+                  {loading ? (
+                    <div className="py-5 text-center w-100">Loading schedules...</div>
+                  ) : filteredDoctors.length === 0 ? (
+                    <div className="py-5 text-center w-100 text-muted">No schedules found for this date.</div>
+                  ) : filteredDoctors.map((doc) => (
+                    <div key={doc.id} className="position-relative border-bottom" style={{ height: '110px', zIndex: 1 }}>
+                      {processShifts(schedules.filter(s => s.doctorId === doc.id)).map((shift, sIdx) => (
+                        <div 
+                          key={sIdx}
+                          className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 d-flex flex-column justify-content-center transition-all hover-scale" 
+                          style={{ 
+                            ...getShiftStyle(shift.start, shift.end),
+                            height: '64px',
+                            zIndex: 2,
+                            cursor: 'default',
+                            overflow: 'hidden',
+                            marginLeft: '1px' // Fine-tuning to match the grid line
+                          }}
+                        >
+                          <div className="d-flex align-items-center gap-1 mb-0">
+                            <i className="bi bi-clock-fill" style={{ fontSize: '10px' }}></i>
+                            <span className="fw-bold" style={{ fontSize: '12px' }}>{shift.type}</span>
+                          </div>
+                          <div className="fw-medium opacity-75" style={{ fontSize: '10px' }}>{shift.start}-{shift.end}</div>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
+  
               </div>
-
-              <div className="position-relative border-bottom" style={{ height: '100px' }}>
-                {/* Appointment Blocks */}
-                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-dark border cursor-pointer hover-opacity transition-all" 
-                     style={{ left: '12.5%', width: '12.5%', backgroundColor: '#f0f0f9', zIndex: 10 }}>
-                  <small className="fw-bold d-block text-truncate">Charlie Davis</small>
-                  <small className="text-muted" style={{ fontSize: '10px' }}>10:00 - 11:00</small>
-                </div>
-              </div>
-
             </div>
           </div>
+
+        {/* Legend */}
+        <div className="d-flex gap-4 mb-5">
+           <div className="d-flex align-items-center gap-2">
+              <span className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: 'rgba(0, 24, 53, 0.1)', border: '1px solid #001835' }}></span>
+              <small className="fw-bold text-muted text-uppercase" style={{ fontSize: '10px' }}>Morning Shift</small>
+           </div>
+           <div className="d-flex align-items-center gap-2">
+              <span className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: 'rgba(0, 106, 106, 0.1)', border: '1px solid #006a6a' }}></span>
+              <small className="fw-bold text-muted text-uppercase" style={{ fontSize: '10px' }}>Afternoon Shift</small>
+           </div>
+           <div className="d-flex align-items-center gap-2">
+              <span className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: 'rgba(102, 16, 242, 0.1)', border: '1px solid #6610f2' }}></span>
+              <small className="fw-bold text-muted text-uppercase" style={{ fontSize: '10px' }}>Late Shift</small>
+           </div>
         </div>
 
       </div>
+      <style>{`
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hover-scale:hover { transform: translateY(-50%) scale(1.02); z-index: 10 !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important; }
+        .focus-ring-none:focus { box-shadow: none !important; }
+      `}</style>
     </ReceptionLayout>
   );
 };
