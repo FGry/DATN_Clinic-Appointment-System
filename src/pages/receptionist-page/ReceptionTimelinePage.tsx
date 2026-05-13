@@ -5,20 +5,20 @@ import { Link } from 'react-router-dom';
 export const ReceptionTimelinePage: React.FC = () => {
   return (
     <ReceptionLayout onOpenBookingModal={() => {}}>
-      <div className="container-fluid px-0">
+      <div className="mx-auto font-manrope" style={{ maxWidth: '1400px' }}>
         
         {/* Controls Bar */}
         <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex flex-wrap align-items-center gap-3">
             {/* Date Picker */}
-            <div className="bg-white border px-3 py-2 rounded d-flex align-items-center gap-2 shadow-sm">
-              <i className="bi bi-calendar3 text-secondary"></i>
-              <span className="fw-semibold">October 24, 2023</span>
+            <div className="bg-white border px-4 py-2.5 rounded-3 d-flex align-items-center gap-3 shadow-sm cursor-pointer hover-border-st-secondary transition-all">
+              <i className="bi bi-calendar3 text-muted"></i>
+              <span className="fw-bolder" style={{ color: '#001835' }}>October 24, 2023</span>
               <i className="bi bi-chevron-down text-muted small ms-2"></i>
             </div>
             
             {/* Specialty Filter */}
-            <select className="form-select border shadow-sm py-2" style={{ width: 'auto' }}>
+            <select className="form-select border shadow-sm py-2.5 fw-medium text-dark bg-white" style={{ width: 'auto', minWidth: '200px' }}>
               <option>All Specialties</option>
               <option>General Practice</option>
               <option>Cardiology</option>
@@ -27,137 +27,134 @@ export const ReceptionTimelinePage: React.FC = () => {
           </div>
 
           {/* View Toggle */}
-          <div className="bg-light p-1 rounded-3 d-flex border">
-            <Link to="/reception/schedule/list" className="btn btn-sm btn-light text-secondary border-0 px-3 fw-semibold">
-              List View
+          <div className="bg-light p-1 rounded-3 d-flex border shadow-sm">
+            <Link to="/reception/schedule/list" className="btn btn-sm btn-light text-muted border-0 px-4 fw-bold hover-bg-white transition-all">
+              <i className="bi bi-list-ul me-2"></i> List View
             </Link>
-            <button className="btn btn-sm btn-white text-primary shadow-sm px-3 fw-semibold">
-              Timeline
+            <button className="btn btn-sm bg-white text-dark shadow-sm px-4 fw-bold" style={{ color: '#001835' }}>
+              <i className="bi bi-calendar-range me-2"></i> Timeline
             </button>
           </div>
         </div>
 
-        {/* Timeline Grid Container */}
-        <div className="card border-0 shadow-sm overflow-hidden mb-4">
-          {/* Grid Header (Doctors) */}
-          <div className="row g-0 border-bottom bg-light">
-            <div className="col border-end p-3" style={{ maxWidth: '80px' }}></div>
-            <div className="col border-end p-3 text-center">
-              <p className="fw-bold text-primary mb-0">Dr. Jenkins</p>
-              <small className="text-muted text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>General Practice</small>
-            </div>
-            <div className="col border-end p-3 text-center">
-              <p className="fw-bold text-primary mb-0">Dr. Chen</p>
-              <small className="text-muted text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Cardiology</small>
-            </div>
-            <div className="col p-3 text-center">
-              <p className="fw-bold text-primary mb-0">Dr. Rodriguez</p>
-              <small className="text-muted text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Pediatrics</small>
+        {/* Stat Cards (Same layout as List Page) */}
+        <div className="row g-4 mb-4">
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4" style={{ borderColor: '#001835' }}>
+              <div className="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
+                <i className="bi bi-calendar-check-fill fs-4" style={{ color: '#001835' }}></i>
+              </div>
+              <div>
+                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Total Slots</p>
+                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>24</h3>
+              </div>
             </div>
           </div>
-
-          {/* Timeline Body */}
-          <div className="position-relative overflow-auto" style={{ height: '600px', backgroundImage: 'linear-gradient(to bottom, #e9ecef 1px, transparent 1px)', backgroundSize: '100% 64px' }}>
-            <div className="d-flex h-100">
-              
-              {/* Time Column */}
-              <div className="d-flex flex-column border-end bg-light opacity-75" style={{ minWidth: '80px' }}>
-                {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'].map(time => (
-                  <div key={time} className="d-flex justify-content-center pt-1" style={{ height: '64px' }}>
-                    <small className="text-muted fw-semibold" style={{ fontSize: '11px' }}>{time}</small>
-                  </div>
-                ))}
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4" style={{ borderColor: '#006a6a' }}>
+              <div className="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
+                <i className="bi bi-check-circle-fill fs-4" style={{ color: '#006a6a' }}></i>
               </div>
-
-              {/* Doctor 1 Column */}
-              <div className="flex-fill position-relative border-end border-light">
-                <div className="position-absolute bg-primary-subtle border-start border-primary border-4 rounded-end p-2 shadow-sm" style={{ top: '32px', left: '4px', right: '4px', height: '48px' }}>
-                  <p className="fw-bold text-primary mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Robert Wilson</p>
-                  <p className="text-primary mb-0" style={{ fontSize: '10px' }}>08:30 AM - Checkup</p>
-                </div>
-                <div className="position-absolute bg-success-subtle border-start border-success border-4 rounded-end p-2 shadow-sm" style={{ top: '128px', left: '4px', right: '4px', height: '96px' }}>
-                  <p className="fw-bold text-success mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Alice Thompson</p>
-                  <p className="text-success mb-0" style={{ fontSize: '10px' }}>10:00 AM - Follow-up</p>
-                </div>
+              <div>
+                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Completed</p>
+                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>08</h3>
               </div>
-
-              {/* Doctor 2 Column */}
-              <div className="flex-fill position-relative border-end border-light">
-                <div className="position-absolute bg-info-subtle border-start border-info border-4 rounded-end p-2 shadow-sm" style={{ top: '64px', left: '4px', right: '4px', height: '64px' }}>
-                  <p className="fw-bold text-info-emphasis mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Mark Davids</p>
-                  <p className="text-info-emphasis mb-0" style={{ fontSize: '10px' }}>09:00 AM - ECG</p>
-                </div>
-                <div className="position-absolute bg-warning-subtle border-start border-warning border-4 rounded-end p-2 shadow-sm" style={{ top: '256px', left: '4px', right: '4px', height: '48px' }}>
-                  <p className="fw-bold text-warning-emphasis mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Sarah Blake</p>
-                  <p className="text-warning-emphasis mb-0" style={{ fontSize: '10px' }}>12:00 PM - Consultation</p>
-                </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4 border-warning">
+              <div className="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
+                <i className="bi bi-hourglass-split fs-4"></i>
               </div>
-
-              {/* Doctor 3 Column */}
-              <div className="flex-fill position-relative border-light">
-                <div className="position-absolute bg-warning-subtle border-start border-warning border-4 rounded-end p-2 shadow-sm" style={{ top: '160px', left: '4px', right: '4px', height: '80px' }}>
-                  <p className="fw-bold text-warning-emphasis mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Tommy Miller (Child)</p>
-                  <p className="text-warning-emphasis mb-0" style={{ fontSize: '10px' }}>10:30 AM - Vaccination</p>
-                </div>
-                <div className="position-absolute bg-primary-subtle border-start border-primary border-4 rounded-end p-2 shadow-sm" style={{ top: '384px', left: '4px', right: '4px', height: '64px' }}>
-                  <p className="fw-bold text-primary mb-0" style={{ fontSize: '11px', lineHeight: '1.2' }}>Emma Watson</p>
-                  <p className="text-primary mb-0" style={{ fontSize: '10px' }}>02:00 PM - Physical</p>
-                </div>
+              <div>
+                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Remaining</p>
+                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>16</h3>
               </div>
-
-              {/* Current Time Line */}
-              <div className="position-absolute bg-danger z-3" style={{ top: '192px', left: '80px', right: '0', height: '2px', pointerEvents: 'none' }}>
-                 <div className="position-absolute bg-danger rounded-circle shadow" style={{ left: '-6px', top: '-4px', width: '10px', height: '10px', boxShadow: '0 0 8px rgba(220,53,69,0.5)' }}></div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white border-start border-4 border-danger">
+              <div className="bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '48px', height: '48px' }}>
+                <i className="bi bi-x-circle-fill fs-4"></i>
               </div>
-
+              <div>
+                <p className="text-muted fw-bold mb-0 text-uppercase" style={{ fontSize: '10px', letterSpacing: '1px' }}>Canceled</p>
+                <h3 className="fw-bolder mb-0" style={{ color: '#001835' }}>0</h3>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Footer Stats */}
-        <div className="row g-4">
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm p-3 d-flex flex-row align-items-center gap-3">
-              <div className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                <i className="bi bi-people-fill fs-5"></i>
+        {/* Timeline Grid */}
+        <div className="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-5">
+          <div className="d-flex overflow-auto">
+            {/* Doctors Column */}
+            <div className="bg-light border-end" style={{ width: '250px', minWidth: '250px' }}>
+              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '60px' }}>
+                <span className="fw-bold text-muted text-uppercase small" style={{ letterSpacing: '1px' }}>Doctors</span>
               </div>
-              <div>
-                <p className="text-muted fw-semibold mb-0 text-uppercase" style={{ fontSize: '10px' }}>Total Appointments</p>
-                <h4 className="fw-bold mb-0">24</h4>
+              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '100px' }}>
+                <div className="d-flex align-items-center gap-3">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white shadow-sm" style={{ width: '40px', height: '40px', backgroundColor: '#001835' }}>SJ</div>
+                  <div>
+                    <h6 className="fw-bold mb-0" style={{ color: '#001835' }}>Dr. Sarah Jenkins</h6>
+                    <small className="text-muted">General Practice</small>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm p-3 d-flex flex-row align-items-center gap-3">
-              <div className="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                <i className="bi bi-check-circle-fill fs-5"></i>
-              </div>
-              <div>
-                <p className="text-muted fw-semibold mb-0 text-uppercase" style={{ fontSize: '10px' }}>Completed</p>
-                <h4 className="fw-bold mb-0">08</h4>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm p-3 d-flex flex-row align-items-center gap-3">
-              <div className="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                <i className="bi bi-hourglass-split fs-5"></i>
-              </div>
-              <div>
-                <p className="text-muted fw-semibold mb-0 text-uppercase" style={{ fontSize: '10px' }}>Remaining</p>
-                <h4 className="fw-bold mb-0">16</h4>
+              <div className="p-3 border-bottom d-flex align-items-center" style={{ height: '100px' }}>
+                <div className="d-flex align-items-center gap-3">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center fw-bolder text-white shadow-sm" style={{ width: '40px', height: '40px', backgroundColor: '#006a6a' }}>MC</div>
+                  <div>
+                    <h6 className="fw-bold mb-0" style={{ color: '#001835' }}>Dr. Michael Chen</h6>
+                    <small className="text-muted">Cardiology</small>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card border-0 shadow-sm p-3 d-flex flex-row align-items-center gap-3">
-              <div className="bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                <i className="bi bi-x-circle-fill fs-5"></i>
+
+            {/* Time Grid */}
+            <div className="flex-grow-1 position-relative" style={{ minWidth: '800px' }}>
+              {/* Time Headers */}
+              <div className="d-flex border-bottom bg-white" style={{ height: '60px' }}>
+                {['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map((time, idx) => (
+                  <div key={idx} className="flex-grow-1 border-end p-2 text-center">
+                    <span className="text-muted fw-bold small">{time}</span>
+                  </div>
+                ))}
               </div>
-              <div>
-                <p className="text-muted fw-semibold mb-0 text-uppercase" style={{ fontSize: '10px' }}>Cancellations</p>
-                <h4 className="fw-bold mb-0">04</h4>
+
+              {/* Grid Lines Overlay */}
+              <div className="position-absolute top-0 bottom-0 w-100 d-flex pointer-events-none" style={{ marginTop: '60px' }}>
+                {[...Array(8)].map((_, idx) => (
+                  <div key={idx} className="flex-grow-1 border-end border-light"></div>
+                ))}
               </div>
+
+              {/* Rows */}
+              <div className="position-relative border-bottom" style={{ height: '100px' }}>
+                {/* Appointment Blocks */}
+                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-white cursor-pointer hover-opacity transition-all" 
+                     style={{ left: '0%', width: '12.5%', backgroundColor: '#001835', zIndex: 10 }}>
+                  <small className="fw-bold d-block text-truncate">Alice Schmidt</small>
+                  <small className="opacity-75" style={{ fontSize: '10px' }}>09:00 - 10:00</small>
+                </div>
+                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-white cursor-pointer hover-opacity transition-all" 
+                     style={{ left: '18.75%', width: '12.5%', backgroundColor: '#006a6a', zIndex: 10 }}>
+                  <small className="fw-bold d-block text-truncate">Bob Martin</small>
+                  <small className="opacity-75" style={{ fontSize: '10px' }}>10:30 - 11:30</small>
+                </div>
+              </div>
+
+              <div className="position-relative border-bottom" style={{ height: '100px' }}>
+                {/* Appointment Blocks */}
+                <div className="position-absolute top-50 translate-middle-y shadow-sm rounded-3 p-2 text-dark border cursor-pointer hover-opacity transition-all" 
+                     style={{ left: '12.5%', width: '12.5%', backgroundColor: '#f0f0f9', zIndex: 10 }}>
+                  <small className="fw-bold d-block text-truncate">Charlie Davis</small>
+                  <small className="text-muted" style={{ fontSize: '10px' }}>10:00 - 11:00</small>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

@@ -18,10 +18,10 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
       <p className="small fw-bold text-st-secondary text-uppercase tracking-wider mb-3">{doctor.specialty}</p>
       <p className="text-muted mb-4 flex-grow-1">{doctor.schedule || "Specializing in comprehensive and preventative care."}</p>
       <button 
-        className="btn btn-st-primary w-100 fs-5 fw-semibold py-2 rounded-3 mt-auto"
+        className="btn btn-st-secondary w-100 fw-semibold py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 mt-auto"
         onClick={() => navigate('/login')}
       >
-        Login to Book
+        <i className="bi bi-calendar-check"></i> Login to Book
       </button>
     </div>
   );
