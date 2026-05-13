@@ -117,7 +117,7 @@ export const AdminSpecialtiesPage: React.FC = () => {
         </div>
 
         {/* Bento Stats */}
-        <div className="row g-4 mb-4">
+        {/* <div className="row g-4 mb-4">
           <div className="col-md-6">
             <div className="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-4 bg-white border-start border-4" style={{ borderColor: '#001835' }}>
               <div className="bg-light rounded-circle d-flex align-items-center justify-content-center" style={{ width: '60px', height: '60px' }}>
@@ -140,7 +140,7 @@ export const AdminSpecialtiesPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
           <div className="card-header bg-white border-bottom p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">

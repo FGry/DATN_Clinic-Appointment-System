@@ -20,11 +20,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     <div className="d-flex bg-light min-vh-100 font-manrope">
       <aside className="border-end-0 position-fixed top-0 start-0 vh-100 d-flex flex-column shadow-sm" style={{ width: '280px', zIndex: 1040, backgroundColor: '#001835' }}>
         
-        <div className="p-4 pt-5 mb-4 border-bottom text-center" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-          <div className="d-inline-flex align-items-center gap-3">
-             <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
+        <div className="p-3 pt-3 mb-4 border-bottom text-center" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+          <div>
+             {/* <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
                 <span className="fw-bolder fs-4" style={{ color: '#001835' }}>H</span>
-             </div>
+             </div> */}
              <div className="text-start">
                 <h5 className="mb-0 fw-bold tracking-tight text-white">HealthSync</h5>
                 <small className="fw-bold text-uppercase" style={{ color: '#6fd7d6', fontSize: '10px', letterSpacing: '1px' }}>Administration</small>
@@ -33,9 +33,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </div>
         
         <nav className="nav flex-column flex-grow-1 px-3 gap-2">
-          <Link to="/admin/dashboard" className={`nav-link rounded-3 d-flex align-items-center gap-3 px-3 py-3 transition-all ${isActive('/admin/dashboard')}`}>
+          {/* <Link to="/admin/dashboard" className={`nav-link rounded-3 d-flex align-items-center gap-3 px-3 py-3 transition-all ${isActive('/admin/dashboard')}`}>
             <i className="bi bi-grid-1x2-fill fs-5"></i> Dashboard
-          </Link>
+          </Link> */}
           <Link to="/admin/doctors" className={`nav-link rounded-3 d-flex align-items-center gap-3 px-3 py-3 transition-all ${isActive('/admin/doctors')}`}>
             <i className="bi bi-heart-pulse-fill fs-5"></i> Doctors
           </Link>
@@ -65,8 +65,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         <header className="bg-white border-bottom position-sticky top-0 d-flex justify-content-between align-items-center px-4 py-3 shadow-sm" style={{ zIndex: 1030 }}>
           
           <div className="input-group" style={{ maxWidth: '400px' }}>
-            <span className="input-group-text bg-light border-0 text-muted rounded-start-pill ps-4"><i className="bi bi-search"></i></span>
-            <input type="text" className="form-control bg-light border-0 rounded-end-pill py-2.5 shadow-none focus-ring-teal" placeholder="Search records, staff ID..." style={{ fontSize: '14px' }} />
+            {/* <span className="input-group-text bg-light border-0 text-muted rounded-start-pill ps-4"><i className="bi bi-search"></i></span>
+            <input type="text" className="form-control bg-light border-0 rounded-end-pill py-2.5 shadow-none focus-ring-teal" placeholder="Search records, staff ID..." style={{ fontSize: '14px' }} /> */}
           </div>
 
           <div className="d-flex align-items-center gap-4">

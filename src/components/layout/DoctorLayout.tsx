@@ -62,8 +62,8 @@ export const DoctorLayout: React.FC<DoctorLayoutProps> = ({ children }) => {
         <header className="bg-white border-bottom position-sticky top-0 d-flex justify-content-between align-items-center px-4 py-3 shadow-sm" style={{ zIndex: 1030 }}>
           
           <div className="input-group" style={{ maxWidth: '400px' }}>
-            <span className="input-group-text bg-light border-0 text-muted rounded-start-pill ps-4"><i className="bi bi-search"></i></span>
-            <input type="text" className="form-control bg-light border-0 rounded-end-pill py-2.5 shadow-none focus-ring-teal" placeholder="Search patient ID or records..." style={{ fontSize: '14px' }} />
+            {/* <span className="input-group-text bg-light border-0 text-muted rounded-start-pill ps-4"><i className="bi bi-search"></i></span>
+            <input type="text" className="form-control bg-light border-0 rounded-end-pill py-2.5 shadow-none focus-ring-teal" placeholder="Search patient ID or records..." style={{ fontSize: '14px' }} /> */}
           </div>
 
           <div className="d-flex align-items-center gap-4">
