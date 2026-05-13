@@ -3,7 +3,7 @@ export type Patient = {
   fullName: string;
   username: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
   role?: string;
 };
@@ -13,7 +13,7 @@ export type CreatePatientPayload = {
   username: string;
   password: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
 };
 
@@ -21,6 +21,6 @@ export type UpdatePatientPayload = {
   id: number;
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
 };
