@@ -97,7 +97,7 @@ export const AdminDoctorsPage: React.FC = () => {
     }
 
     return doctors.filter((doctor) => {
-      const specialtyName = specialtyMap[doctor.specialtyId] ?? '';
+      const specialtyName = doctor.specialtyName ?? '';
       return (
         doctor.fullName.toLowerCase().includes(keyword) ||
         doctor.email.toLowerCase().includes(keyword) ||
@@ -323,7 +323,7 @@ export const AdminDoctorsPage: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-muted">{specialtyMap[doctor.specialtyId] ?? `#${doctor.specialtyId}`}</td>
+                      <td className="px-4 py-3 text-muted">{doctor.specialtyName ?? `#${doctor.specialtyId}`}</td>
                       <td className="px-4 py-3 text-muted">
                         <div>{doctor.email}</div>
                         <small>{doctor.phone}</small>

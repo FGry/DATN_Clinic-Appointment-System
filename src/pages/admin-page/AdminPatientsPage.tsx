@@ -107,11 +107,15 @@ export const AdminPatientsPage: React.FC = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
-  const filteredPatients = patients.filter(p =>
-    p.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPatients = React.useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return patients;
+    return patients.filter(p =>
+      p.fullName.toLowerCase().includes(query) ||
+      p.email.toLowerCase().includes(query) ||
+      p.username.toLowerCase().includes(query)
+    );
+  }, [patients, searchQuery]);
 
   const totalPages = Math.ceil(filteredPatients.length / itemsPerPage) || 1;
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -128,7 +132,7 @@ export const AdminPatientsPage: React.FC = () => {
             <p className="text-muted mb-0">Oversee patient records, contact information, and medical histories.</p>
           </div>
           {/* <button className="btn fw-bold px-4 py-2 d-flex align-items-center gap-2 rounded-3 shadow-sm text-white transition-all active-scale" style={{ backgroundColor: '#001835' }} onClick={handleAddNew}>
-            <i className="bi bi-person-plus-fill fs-5"></i> Add New Patient
+            <i className="bi bi-plus-lg fs-5"></i> Add New Patient
           </button> */}
         </div>
 

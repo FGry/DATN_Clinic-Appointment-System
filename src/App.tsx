@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // Import các Pages đã tạo
 import { LoginPage } from './pages/auth-page/LoginPage';
 import { DepartmentPage } from './pages/home-page/DepartmentPage';
@@ -8,7 +8,7 @@ import { RegisterPage } from './pages/auth-page/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth-page/ForgotPasswordPage';
 import { HomePage } from './pages/home-page/HomePage';
 import { DoctorListPage } from './pages/home-page/DoctorListPage';
-import { ReceptionDashboardPage } from './pages/receptionist-page/ReceptionDashboardPage';
+import { ReceptionAppointmentPage } from './pages/receptionist-page/ReceptionAppointmentPage';
 import { ReceptionListPage } from './pages/receptionist-page/ReceptionListPage';
 import { ReceptionTimelinePage } from './pages/receptionist-page/ReceptionTimelinePage';
 import { DoctorDashboardPage } from './pages/doctor-page/DoctorDashboardPage';
@@ -41,7 +41,8 @@ function App() {
         {/* Dùng :id để sau này truyền ID của khoa, ví dụ /department/cardiology */}
         <Route path="/doctors" element={<DoctorListPage />} />
         {/* Xử lý đường dẫn không tồn tại (Lỗi 404) */}
-        <Route path="/reception" element={<ReceptionDashboardPage />} />
+        <Route path="/reception" element={<Navigate to="/reception/appointment" replace />} />
+        <Route path="/reception/appointment" element={<ReceptionAppointmentPage />} />
         <Route path="/reception/schedule/list" element={<ReceptionListPage />} />
         <Route path="/reception/schedule/timeline" element={<ReceptionTimelinePage />} />
         <Route path="/doctor" element={<DoctorDashboardPage />} />

@@ -99,7 +99,7 @@ export const AdminReceptionistsPage: React.FC = () => {
             <p className="text-muted mb-0">Oversee front-desk personnel, shift schedules, and staff credentials.</p>
           </div>
           <button className="btn fw-bold px-4 py-2 d-flex align-items-center gap-2 rounded-3 shadow-sm text-white transition-all active-scale" style={{ backgroundColor: '#001835' }} onClick={handleAddNew}>
-            <i className="bi bi-person-badge-fill fs-5"></i> Add New Receptionist
+            <i className="bi bi-plus-lg fs-5"></i> Add New Receptionist
           </button>
         </div>
 

@@ -1,10 +1,10 @@
 export interface Doctor {
-    id: string;
-    name: string;
-    specialty: string;
-    schedule: string;
-    imageUrl: string;
-  }
+  id: string;
+  name: string;
+  specialty: string;
+  schedule: string;
+  imageUrl: string;
+}
 
 export type AdminDoctor = {
   id?: number;
@@ -15,6 +15,7 @@ export type AdminDoctor = {
   gender: boolean;
   password?: string;
   specialtyId: number;
+  specialtyName?: string;
   fee: number;
   experience: string;
   avaUrl: string;
