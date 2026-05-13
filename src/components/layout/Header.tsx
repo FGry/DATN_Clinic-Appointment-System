@@ -28,15 +28,15 @@ export const Header: React.FC = () => {
         <div className="d-flex align-items-center gap-3">
           <button 
             onClick={() => navigate('/login')}
-            className="btn fs-5 fw-semibold text-st-primary"
+            className="btn fs-5 fw-semibold text-st-secondary"
           >
             Login
           </button>
           <button 
             onClick={() => navigate('/register')}
-            className="btn btn-st-primary fs-5 fw-semibold px-4 rounded-3"
+            className="btn btn-st-secondary fw-semibold py-2 px-4 d-flex align-items-center justify-content-center gap-2 rounded-3"
           >
-            Register
+            <i className="bi bi-person-plus"></i> Register
           </button>
         </div>
       </nav>
