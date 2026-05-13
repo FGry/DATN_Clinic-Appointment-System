@@ -14,7 +14,7 @@ export const AdminPatientsPage: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    phoneNumber: '',
+    phone: '',
     address: '',
   });
   const [deletingUsername, setDeletingUsername] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export const AdminPatientsPage: React.FC = () => {
 
   const handleAddNew = () => {
     setEditingId(null);
-    setFormData({ fullName: '', email: '', phoneNumber: '', address: '' });
+    setFormData({ fullName: '', email: '', phone: '', address: '' });
     setShowModal(true);
   };
 
@@ -53,7 +53,7 @@ export const AdminPatientsPage: React.FC = () => {
     setFormData({
       fullName: patient.fullName,
       email: patient.email,
-      phoneNumber: patient.phoneNumber,
+      phone: patient.phone,
       address: patient.address,
     });
     setShowModal(true);
@@ -78,7 +78,7 @@ export const AdminPatientsPage: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!formData.fullName || !formData.email || !formData.phoneNumber || !formData.address) {
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.address) {
       showToast('Please fill in all fields!', 'error');
       return;
     }
@@ -88,7 +88,7 @@ export const AdminPatientsPage: React.FC = () => {
           id: editingId,
           fullName: formData.fullName,
           email: formData.email,
-          phoneNumber: formData.phoneNumber,
+          phone: formData.phone,
           address: formData.address,
         };
         await patientApi.update(editingId, updateData);
@@ -209,7 +209,7 @@ export const AdminPatientsPage: React.FC = () => {
                       <td className="px-4 py-3"><code style={{ color: '#006a6a' }}>@{patient.username}</code></td>
                       <td className="px-4 py-3">
                         <div className="text-dark small fw-medium">{patient.email}</div>
-                        <small className="text-muted">{patient.phoneNumber}</small>
+                        <small className="text-muted">{patient.phone}</small>
                       </td>
                       <td className="px-4 py-3 text-muted small">{patient.address}</td>
                       <td className="px-4 py-3 text-end">
@@ -262,7 +262,7 @@ export const AdminPatientsPage: React.FC = () => {
                         <InputField id="email" label="Email Address" type="email" icon="envelope" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Enter email address" />
                       </div>
                       <div className="col-12">
-                        <InputField id="phoneNumber" label="Phone Number" type="tel" icon="telephone" value={formData.phoneNumber} onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} placeholder="Enter phone number" />
+                        <InputField id="phone" label="Phone Number" type="tel" icon="telephone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="Enter phone number" />
                       </div>
                       <div className="col-12">
                         <InputField id="address" label="Home Address" type="text" icon="house" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} placeholder="Enter home address" />

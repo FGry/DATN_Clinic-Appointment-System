@@ -6,6 +6,7 @@ import type {
   UpdateReceptionistPayload,
 } from '../types/models/Receptionist';
 import type { Patient, CreatePatientPayload, UpdatePatientPayload } from '../types/models/Patient';
+import type { AdminDoctor, CreateDoctorPayload, UpdateDoctorPayload } from '../types/models/Doctor';
 
 export const specialtyApi = {
   getAll: () => apiRequest<Specialty[]>('/api/admin/specialties'),
@@ -66,6 +67,27 @@ export const patientApi = {
 
   deleteByUsername: (username: string) =>
     apiRequest<void>(`/api/admin/patients/${username}`, {
+      method: 'DELETE',
+    }),
+};
+
+export const doctorApi = {
+  getAll: () => apiRequest<AdminDoctor[]>('/api/admin/doctors'),
+
+  create: (data: CreateDoctorPayload) =>
+    apiRequest<AdminDoctor>('/api/admin/doctors', {
+      method: 'POST',
+      body: data,
+    }),
+
+  update: (id: number, data: UpdateDoctorPayload) =>
+    apiRequest<AdminDoctor>(`/api/admin/doctors/${id}`, {
+      method: 'PUT',
+      body: data,
+    }),
+
+  deleteById: (id: number) =>
+    apiRequest<void>(`/api/admin/doctors/${id}`, {
       method: 'DELETE',
     }),
 };
