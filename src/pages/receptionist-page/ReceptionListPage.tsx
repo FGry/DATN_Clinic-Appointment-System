@@ -41,9 +41,9 @@ export const ReceptionListPage: React.FC = () => {
   const timeSlots = useMemo(() => {
     const slots = [];
     for (let h = 8; h <= 17; h++) {
-      if (h === 12) continue; // Skip lunch hour
       for (let m = 0; m < 60; m += 15) {
         if (h === 17 && m > 0) break; // Don't go past 17:00
+        if (h === 12 && m > 0) continue; // Skip 12:15, 12:30, 12:45
         const hour = h < 10 ? `0${h}` : `${h}`;
         const minute = m < 10 ? `0${m}` : `${m}`;
         slots.push(`${hour}:${minute}`);
@@ -391,7 +391,7 @@ export const ReceptionListPage: React.FC = () => {
             <div className="modal-backdrop fade show" onClick={() => setShowModal(false)} style={{ backdropFilter: 'blur(12px)', backgroundColor: 'rgba(0,24,53,0.6)' }}></div>
             <div className="modal fade show d-block" tabIndex={-1}>
               <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '520px' }}>
-                <div className="modal-content border-0 shadow-2xl rounded-5 overflow-hidden animate-slide-up">
+                <div className="modal-content border-0 shadow-2xl rounded-5 animate-slide-up" style={{ overflow: 'visible' }}>
                   <div className="modal-header bg-white py-3 px-4 border-bottom-0">
                     <div className="d-flex align-items-center gap-3">
                       <div className="bg-light rounded-4 p-2 d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', backgroundColor: 'rgba(0, 106, 106, 0.05) !important' }}>
@@ -406,7 +406,7 @@ export const ReceptionListPage: React.FC = () => {
                     </div>
                     <button type="button" className="btn-close shadow-none small" style={{ fontSize: '0.75rem' }} onClick={() => setShowModal(false)}></button>
                   </div>
-                  <div className="modal-body p-4 px-5 pt-0" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+                  <div className="modal-body p-4 px-5 pt-0" style={{ overflow: 'visible' }}>
                     <form onSubmit={handleSubmit} className="row g-3" noValidate>
                       <div className="col-12">
                         <label htmlFor="doctorId" className="form-label fw-bold text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Select Doctor</label>
@@ -448,7 +448,6 @@ export const ReceptionListPage: React.FC = () => {
                               caretColor: 'transparent'
                             }}
                           />
-                          <i className="bi bi-calendar-event text-muted ms-auto small"></i>
                         </div>
                       </div>
 
@@ -464,13 +463,29 @@ export const ReceptionListPage: React.FC = () => {
                             <i className="bi bi-clock ms-auto text-muted small"></i>
                           </div>
                           {activeDropdown === 'start' && (
-                            <div className="time-dropdown shadow-lg border-0 rounded-3 overflow-hidden">
-                              {timeSlots.map(slot => (
+                            <div className="time-dropdown shadow-lg border-0 rounded-3">
+                              {timeSlots.filter(slot => slot <= '16:00').map(slot => (
                                 <div
                                   key={`start-${slot}`}
                                   className={`time-item py-1.5 px-3 transition-all small ${formData.startTime === slot ? 'selected bg-teal text-white' : ''}`}
                                   onClick={() => {
-                                    setFormData(prev => ({ ...prev, startTime: slot }));
+                                    const [startH, startM] = slot.split(':').map(Number);
+                                    const minEndMins = startH * 60 + startM + 60;
+                                    
+                                    setFormData(prev => {
+                                      let newEndTime = prev.endTime;
+                                      if (newEndTime) {
+                                        const [endH, endM] = newEndTime.split(':').map(Number);
+                                        if ((endH * 60 + endM) < minEndMins) {
+                                          const validSlot = timeSlots.find(s => {
+                                            const [sH, sM] = s.split(':').map(Number);
+                                            return (sH * 60 + sM) >= minEndMins;
+                                          });
+                                          newEndTime = validSlot || '';
+                                        }
+                                      }
+                                      return { ...prev, startTime: slot, endTime: newEndTime };
+                                    });
                                     setActiveDropdown(null);
                                   }}
                                 >
@@ -494,8 +509,13 @@ export const ReceptionListPage: React.FC = () => {
                             <i className="bi bi-clock ms-auto text-muted small"></i>
                           </div>
                           {activeDropdown === 'end' && (
-                            <div className="time-dropdown shadow-lg border-0 rounded-3 overflow-hidden">
-                              {timeSlots.map(slot => (
+                            <div className="time-dropdown shadow-lg border-0 rounded-3">
+                              {timeSlots.filter(slot => {
+                                if (!formData.startTime) return true;
+                                const [startH, startM] = formData.startTime.split(':').map(Number);
+                                const [slotH, slotM] = slot.split(':').map(Number);
+                                return (slotH * 60 + slotM) >= (startH * 60 + startM + 60);
+                              }).map(slot => (
                                 <div
                                   key={`end-${slot}`}
                                   className={`time-item py-1.5 px-3 transition-all small ${formData.endTime === slot ? 'selected bg-teal text-white' : ''}`}
