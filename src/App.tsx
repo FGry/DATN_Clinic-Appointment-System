@@ -22,7 +22,6 @@ import { AdminDoctorsPage } from './pages/admin-page/AdminDoctorsPage';
 import { AdminReceptionistsPage } from './pages/admin-page/AdminReceptionistsPage';
 import { AdminSpecialtiesPage } from './pages/admin-page/AdminSpecialtiesPage';
 import { AdminPatientsPage } from './pages/admin-page/AdminPatientsPage';
-import { AdminDashboardPage } from './pages/admin-page/AdminDashboardPage';
 import { ResetPasswordPage } from './pages/auth-page/ResetPasswordPage';
 import { VerifyOtpPage } from './pages/auth-page/VerifyPage';
 
@@ -53,7 +52,7 @@ function App() {
         <Route path="/patient/appointment-details" element={<PatientAppointmentDetailsPage />} />
         <Route path="/patient/appointments/:id" element={<PatientAppointmentDetailsPage />} />
         <Route path="/patient/appointments/history-detail" element={<PatientPastAppointmentPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/admin" element={<AdminDoctorsPage />} />
         <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
         <Route path="/admin/patients" element={<AdminPatientsPage />} />
         <Route path="/admin/receptionists" element={<AdminReceptionistsPage />} />

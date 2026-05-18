@@ -74,7 +74,7 @@ export const PatientAppointmentsPage: React.FC = () => {
   });
 
   return (
-    <PatientLayout onOpenBookingModal={() => setShowModal(true)}>
+    <PatientLayout>
       <div className="mx-auto font-manrope" style={{ maxWidth: '1200px' }}>
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5">
           <div>

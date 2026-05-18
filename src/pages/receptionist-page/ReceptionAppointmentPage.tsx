@@ -46,6 +46,12 @@ export const ReceptionAppointmentPage: React.FC = () => {
     fetchInitialData();
   }, [filterDate]);
 
+  useEffect(() => {
+    // Set today's date on component mount
+    const today = new Date().toISOString().split('T')[0];
+    setFilterDate(today);
+  }, []);
+
   const fetchInitialData = async () => {
     try {
       const [docsData, specsData] = await Promise.all([

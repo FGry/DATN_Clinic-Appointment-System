@@ -23,11 +23,11 @@ export const DoctorLayout: React.FC<DoctorLayoutProps> = ({ children }) => {
     <div className="d-flex bg-light min-vh-100 font-manrope">
       <aside className="border-end-0 position-fixed top-0 start-0 vh-100 d-flex flex-column shadow-sm" style={{ width: '280px', zIndex: 1040, backgroundColor: '#001835' }}>
         
-        <div className="p-4 pt-5 mb-4 border-bottom text-center" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-          <div className="d-inline-flex align-items-center gap-3">
-             <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
+        <div className="p-3 pt-3 mb-4 border-bottom text-center" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+          <div>
+             {/* <div className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
                 <span className="fw-bolder fs-4" style={{ color: '#001835' }}>H</span>
-             </div>
+             </div> */}
              <div className="text-start">
                 <h5 className="mb-0 fw-bold tracking-tight text-white">HealthSync</h5>
                 <small className="fw-bold text-uppercase" style={{ color: '#6fd7d6', fontSize: '10px', letterSpacing: '1px' }}>Physician Portal</small>
