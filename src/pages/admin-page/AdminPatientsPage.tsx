@@ -42,12 +42,6 @@ export const AdminPatientsPage: React.FC = () => {
     }
   };
 
-  const handleAddNew = () => {
-    setEditingId(null);
-    setFormData({ fullName: '', email: '', phone: '', address: '' });
-    setShowModal(true);
-  };
-
   const handleEdit = (patient: Patient) => {
     setEditingId(patient.id || null);
     setFormData({

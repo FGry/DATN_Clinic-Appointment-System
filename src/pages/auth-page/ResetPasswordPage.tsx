@@ -11,17 +11,14 @@ export const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) { setError("Mật khẩu không khớp."); return; }
     if (password.length < 8) { setError("Mật khẩu tối thiểu 8 ký tự."); return; }
-    setIsLoading(true);
     authService.resetPassword({ email, newPassword: password })
       .then(() => { alert("Đổi mật khẩu thành công!"); navigate('/login'); })
       .catch((err) => setError(err?.message || 'Lỗi.'))
-      .finally(() => setIsLoading(false));
   };
 
   return (

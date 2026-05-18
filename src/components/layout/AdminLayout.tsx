@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogoutButton } from '../common/LogoutButton';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
