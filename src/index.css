@@ -5,6 +5,7 @@
 :root {
   --st-primary: #001835;
   --st-secondary: #006a6a;
+  --st-secondary-hover: #008a8a;
   --st-text: #43474e;
   --st-bg-light: #edeeef;
 }
@@ -37,10 +38,15 @@ body {
   border: none;
 }
 .btn-st-secondary:hover {
-  background-color: #008a8a;
+  background-color: var(--st-secondary-hover);
   color: white;
 }
 
 .hover-border-st-secondary:hover {
   border-color: var(--st-secondary) !important;
+}
+
+/* Hover text utility that matches the secondary button hover color */
+.hover-text-st-secondary:hover {
+  color: var(--st-secondary-hover) !important;
 }

@@ -72,7 +72,7 @@ export const PatientLayout: React.FC<PatientLayoutProps> = ({ children }) => {
       </aside>
 
       {/* --- Main Wrapper --- */}
-      <div className="grow d-flex flex-column" style={{ marginLeft: '280px' }}>
+      <div className="flex-grow-1 d-flex flex-column" style={{ marginLeft: '280px' }}>
         <header className="bg-white border-bottom position-sticky top-0 d-flex justify-content-between align-items-center px-4 py-3 shadow-sm" style={{ zIndex: 1030 }}>
           
           <div className="input-group" style={{ maxWidth: '400px' }}>

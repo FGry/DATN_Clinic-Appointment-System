@@ -35,6 +35,7 @@ export type CreateDoctorPayload = {
 };
 
 export type UpdateDoctorPayload = {
+  id: number;
   fullName: string;
   email: string;
   phone: string;

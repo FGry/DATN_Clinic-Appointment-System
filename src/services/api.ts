@@ -1,5 +1,12 @@
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
+// Use VITE_API_BASE_URL when provided.
+// In local dev, keep 5173 on the Vite proxy path, but let other ports call the
+// backend directly so they do not depend on the same dev-server proxy config.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? (
+  import.meta.env.DEV && window.location.port === '5173'
+    ? ''
+    : 'http://localhost:8080'
+);
 
 export class ApiError extends Error {
   status: number;

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Doctor } from '../../types/models/Doctor';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService';
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -8,6 +9,17 @@ interface DoctorCardProps {
 
 export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
   const navigate = useNavigate();
+  const session = authService.getSession();
+
+  const handleBookAppointment = () => {
+    if (session?.role === 'ROLE_PATIENT') {
+      navigate(`/patient/appointments?doctorId=${doctor.id}&openBooking=1`);
+      return;
+    }
+
+    navigate('/login');
+  };
+
   return (
     <div className="card h-100 border-0 shadow-sm p-4 text-center hover-border-st-secondary transition-all" style={{ borderRadius: '1rem' }}>
       <div className="position-relative mx-auto mb-4" style={{ width: '160px', height: '160px' }}>
@@ -19,9 +31,9 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
       <p className="text-muted mb-4 flex-grow-1">{doctor.schedule || "Specializing in comprehensive and preventative care."}</p>
       <button 
         className="btn btn-st-secondary w-100 fw-semibold py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 mt-auto"
-        onClick={() => navigate('/login')}
+        onClick={handleBookAppointment}
       >
-        <i className="bi bi-calendar-check"></i> Login to Book
+        <i className="bi bi-calendar-check"></i> {session?.role === 'ROLE_PATIENT' ? 'Book Appointment' : 'Login to Book'}
       </button>
     </div>
   );

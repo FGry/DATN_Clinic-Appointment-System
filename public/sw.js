@@ -34,6 +34,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Never intercept API requests. Let them go directly to the network or the
+  // Vite dev proxy so backend fetch failures don't bubble up as SW errors.
+  if (url.pathname.startsWith('/api/')) {
+    return;
+  }
+
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -42,7 +48,10 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put('/', clone));
           return response;
         })
-        .catch(() => caches.match('/'))
+        .catch(async () => {
+          const cachedHome = await caches.match('/');
+          return cachedHome || Response.error();
+        })
     );
     return;
   }
@@ -53,14 +62,16 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
 
-      return fetch(request).then((response) => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-        }
+      return fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
 
-        return response;
-      });
+          return response;
+        })
+        .catch(() => Response.error());
     })
   );
 });

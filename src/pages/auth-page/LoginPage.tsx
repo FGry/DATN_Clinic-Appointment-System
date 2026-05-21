@@ -57,6 +57,7 @@ export const LoginPage: React.FC = () => {
       if (role === 'ROLE_ADMIN') navigate('/admin');
       else if (role === 'ROLE_DOCTOR') navigate('/doctor');
       else if (role === 'ROLE_RECEPTIONIST') navigate('/reception');
+      else if (role === 'ROLE_PATIENT') navigate('/patient');
       else navigate('/');
       
     } catch (err) {
