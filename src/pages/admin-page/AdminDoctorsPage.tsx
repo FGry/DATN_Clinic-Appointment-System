@@ -126,16 +126,16 @@ export const AdminDoctorsPage: React.FC = () => {
   const openEditModal = (doctor: AdminDoctor) => {
     setEditingId(doctor.id ?? null);
     setFormData({
-      fullName: doctor.fullName,
-      email: doctor.email,
-      phone: doctor.phone,
-      address: doctor.address,
-      gender: doctor.gender,
+      fullName: doctor.fullName ?? '',
+      email: doctor.email ?? '',
+      phone: doctor.phone ?? '',
+      address: doctor.address ?? '',
+      gender: doctor.gender ?? true,
       password: '',
-      specialtyId: doctor.specialtyId,
-      fee: doctor.fee,
-      experience: doctor.experience,
-      avaUrl: doctor.avaUrl,
+      specialtyId: doctor.specialtyId ?? 0,
+      fee: doctor.fee ?? 0,
+      experience: doctor.experience ?? '',
+      avaUrl: doctor.avaUrl ?? '',
     });
     setShowModal(true);
   };
@@ -169,8 +169,9 @@ export const AdminDoctorsPage: React.FC = () => {
     }
 
     try {
-      if (editingId) {
+      if (editingId !== null) {
         const payload: UpdateDoctorPayload = {
+          id: editingId,
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone,

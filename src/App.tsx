@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
 // Import các Pages đã tạo
 import { LoginPage } from './pages/auth-page/LoginPage';
-import { DepartmentPage } from './pages/home-page/DepartmentPage';
+import { SpecialtyDetail } from './pages/home-page/SpeciatiesDetail';
 
 // Giả sử bạn đã tạo các file này tương tự cấu trúc tôi đã hướng dẫn
 import { RegisterPage } from './pages/auth-page/RegisterPage'; 
@@ -24,6 +25,7 @@ import { AdminSpecialtiesPage } from './pages/admin-page/AdminSpecialtiesPage';
 import { AdminPatientsPage } from './pages/admin-page/AdminPatientsPage';
 import { ResetPasswordPage } from './pages/auth-page/ResetPasswordPage';
 import { VerifyOtpPage } from './pages/auth-page/VerifyPage';
+import { DepartmentPage } from './pages/home-page/DepartmentPage';
 
 function App() {
   return (
@@ -36,27 +38,34 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         
         {/* Trang danh sách bác sĩ/khoa */}
-        <Route path="/department/:id" element={<DepartmentPage />} /> 
+        <Route path="/department" element={<DepartmentPage />} /> 
+        <Route path="/department/:id" element={<SpecialtyDetail />} /> 
         {/* Dùng :id để sau này truyền ID của khoa, ví dụ /department/cardiology */}
         <Route path="/doctors" element={<DoctorListPage />} />
-        {/* Xử lý đường dẫn không tồn tại (Lỗi 404) */}
+        {/* Reception Routes (ROLE_RECEPTIONIST) */}
         <Route path="/reception" element={<Navigate to="/reception/appointment" replace />} />
-        <Route path="/reception/appointment" element={<ReceptionAppointmentPage />} />
-        <Route path="/reception/schedule/list" element={<ReceptionListPage />} />
-        <Route path="/reception/schedule/timeline" element={<ReceptionTimelinePage />} />
-        <Route path="/doctor" element={<DoctorDashboardPage />} />
-        <Route path="/doctor/schedule" element={<DoctorSchedulePage />} />
-        <Route path="/doctor/patients" element={<DoctorPatientsPage />} />
-        <Route path="/patient" element={<PatientDashboardPage />} />
-        <Route path="/patient/appointments" element={<PatientAppointmentsPage />} />
-        <Route path="/patient/appointment-details" element={<PatientAppointmentDetailsPage />} />
-        <Route path="/patient/appointments/:id" element={<PatientAppointmentDetailsPage />} />
-        <Route path="/patient/appointments/history-detail" element={<PatientPastAppointmentPage />} />
-        <Route path="/admin" element={<AdminDoctorsPage />} />
-        <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
-        <Route path="/admin/patients" element={<AdminPatientsPage />} />
-        <Route path="/admin/receptionists" element={<AdminReceptionistsPage />} />
-        <Route path="/admin/specialties" element={<AdminSpecialtiesPage />} />
+        <Route path="/reception/appointment" element={<ProtectedRoute requiredRole="ROLE_RECEPTIONIST"><ReceptionAppointmentPage /></ProtectedRoute>} />
+        <Route path="/reception/schedule/list" element={<ProtectedRoute requiredRole="ROLE_RECEPTIONIST"><ReceptionListPage /></ProtectedRoute>} />
+        <Route path="/reception/schedule/timeline" element={<ProtectedRoute requiredRole="ROLE_RECEPTIONIST"><ReceptionTimelinePage /></ProtectedRoute>} />
+        
+        {/* Doctor Routes (ROLE_DOCTOR) */}
+        <Route path="/doctor" element={<ProtectedRoute requiredRole="ROLE_DOCTOR"><DoctorDashboardPage /></ProtectedRoute>} />
+        <Route path="/doctor/schedule" element={<ProtectedRoute requiredRole="ROLE_DOCTOR"><DoctorSchedulePage /></ProtectedRoute>} />
+        <Route path="/doctor/patients" element={<ProtectedRoute requiredRole="ROLE_DOCTOR"><DoctorPatientsPage /></ProtectedRoute>} />
+        
+        {/* Patient Routes (ROLE_PATIENT) */}
+        <Route path="/patient" element={<ProtectedRoute requiredRole="ROLE_PATIENT"><PatientDashboardPage /></ProtectedRoute>} />
+        <Route path="/patient/appointments" element={<ProtectedRoute requiredRole="ROLE_PATIENT"><PatientAppointmentsPage /></ProtectedRoute>} />
+        <Route path="/patient/appointment-details" element={<ProtectedRoute requiredRole="ROLE_PATIENT"><PatientAppointmentDetailsPage /></ProtectedRoute>} />
+        <Route path="/patient/appointments/:id" element={<ProtectedRoute requiredRole="ROLE_PATIENT"><PatientAppointmentDetailsPage /></ProtectedRoute>} />
+        <Route path="/patient/appointments/history-detail" element={<ProtectedRoute requiredRole="ROLE_PATIENT"><PatientPastAppointmentPage /></ProtectedRoute>} />
+        
+        {/* Admin Routes (ROLE_ADMIN) */}
+        <Route path="/admin" element={<ProtectedRoute requiredRole="ROLE_ADMIN"><AdminDoctorsPage /></ProtectedRoute>} />
+        <Route path="/admin/doctors" element={<ProtectedRoute requiredRole="ROLE_ADMIN"><AdminDoctorsPage /></ProtectedRoute>} />
+        <Route path="/admin/patients" element={<ProtectedRoute requiredRole="ROLE_ADMIN"><AdminPatientsPage /></ProtectedRoute>} />
+        <Route path="/admin/receptionists" element={<ProtectedRoute requiredRole="ROLE_ADMIN"><AdminReceptionistsPage /></ProtectedRoute>} />
+        <Route path="/admin/specialties" element={<ProtectedRoute requiredRole="ROLE_ADMIN"><AdminSpecialtiesPage /></ProtectedRoute>} />
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="*" element={

@@ -3,20 +3,24 @@ import { Link } from 'react-router-dom';
 import { Header } from '../../components/layout/Header';
 import { DoctorCard } from '../../components/common/DoctorCard';
 import type { Doctor } from '../../types/models/Doctor';
+import { publicContentApi } from '../../services/publicContentService';
+import type { Specialty } from '../../types/models/Specialty';
 import bannerImage1 from '../../assets/banner1.png';
 import bannerImage2 from '../../assets/banner2.jpg';
 import bannerImage3 from '../../assets/banner3.jpg';
 
-const topDoctors: Doctor[] = [
-  { id: '1', name: 'Dr. Sarah Mitchell', specialty: 'Senior Cardiologist', schedule: '', imageUrl: 'https://placehold.co/400x400' },
-  { id: '2', name: 'Dr. James Wilson', specialty: 'Chief Neurologist', schedule: '', imageUrl: 'https://placehold.co/400x400' },
-  { id: '3', name: 'Dr. Elena Rodriguez', specialty: 'Pediatric Specialist', schedule: '', imageUrl: 'https://placehold.co/400x400' }
-];
-
 export const HomePage: React.FC = () => {
   // Logic chuyển đổi Banner
   const banners = [bannerImage1, bannerImage2, bannerImage3];
+  const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  const [filteredSpecialties, setFilteredSpecialties] = useState<Specialty[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [loadingSpecialties, setLoadingSpecialties] = useState(false);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const [errorSpecialties, setErrorSpecialties] = useState<string | null>(null);
+  const [errorDoctors, setErrorDoctors] = useState<string | null>(null);
+  const [searchSpecialty, setSearchSpecialty] = useState('');
 
   useEffect(() => {
     // Thiết lập timer tự động chuyển ảnh mỗi 5 giây
@@ -27,6 +31,69 @@ export const HomePage: React.FC = () => {
     // Dọn dẹp timer khi component unmount
     return () => clearInterval(timer);
   }, [banners.length]);
+
+  // Fetch specialties from API
+  useEffect(() => {
+    const fetchSpecialties = async () => {
+      setLoadingSpecialties(true);
+      setErrorSpecialties(null);
+      try {
+        const specs = await publicContentApi.getSpecialties();
+        const data = specs || [];
+        setSpecialties(data);
+        setFilteredSpecialties(data);
+        console.log('Public specialties fetched:', data);
+      } catch (err) {
+        setSpecialties([]);
+        setFilteredSpecialties([]);
+        setErrorSpecialties('Failed to load specialties. Please try again.');
+      } finally {
+        setLoadingSpecialties(false);
+      }
+    };
+    fetchSpecialties();
+  }, []);
+
+  // Fetch doctors from API
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      setLoadingDoctors(true);
+      setErrorDoctors(null);
+      try {
+        const docs = await publicContentApi.getDoctors();
+        // Map AdminDoctor -> Doctor (minimal fields used in UI)
+        const mapped: Doctor[] = (docs || []).map((d: any) => ({
+          id: String(d.id ?? d.doctorId ?? ''),
+          name: d.fullName ?? '',
+          specialty: d.specialtyName ?? '',
+          schedule: '',
+          imageUrl: d.avaUrl ?? d.imageUrl ?? 'https://placehold.co/400x400',
+        }));
+        setDoctors(mapped);
+        console.log('Public doctors fetched:', mapped);
+      } catch (err) {
+        setDoctors([]);
+        setErrorDoctors('Failed to load doctors. Please try again.');
+      } finally {
+        setLoadingDoctors(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  // Handle specialty search
+  const handleSpecialtySearch = (value: string) => {
+    setSearchSpecialty(value);
+    if (value.trim() === '') {
+      setFilteredSpecialties(specialties);
+    } else {
+      const filtered = specialties.filter(spec =>
+        spec.name.toLowerCase().includes(value.toLowerCase()) ||
+        spec.description.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSpecialties(filtered);
+    }
+  };
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -67,7 +134,29 @@ export const HomePage: React.FC = () => {
                   <div className="row g-3 align-items-end">
                     <div className="col-md-4">
                       <label className="small fw-bold text-muted text-uppercase mb-2">Specialty</label>
-                      <input className="form-control bg-light py-2" placeholder="Search Specialty" type="text"/>
+                      <div className="position-relative">
+                        <input 
+                          className="form-control bg-light py-2" 
+                          placeholder="Search Specialty" 
+                          type="text"
+                          value={searchSpecialty}
+                          onChange={(e) => handleSpecialtySearch(e.target.value)}
+                          autoComplete="off"
+                        />
+                        {searchSpecialty && filteredSpecialties.length > 0 && (
+                          <div className="dropdown-menu position-absolute w-100 show mt-1" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                            {filteredSpecialties.map(spec => (
+                              <button
+                                key={spec.id}
+                                className="dropdown-item"
+                                onClick={() => setSearchSpecialty(spec.name)}
+                              >
+                                {spec.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="col-md-4">
                       <label className="small fw-bold text-muted text-uppercase mb-2">Date</label>
@@ -102,27 +191,41 @@ export const HomePage: React.FC = () => {
         {/* Explore Specialties */}
         <section className="container py-5 mt-4">
           <div className="text-center mb-5">
-            <span className="small fw-bold text-st-secondary text-uppercase tracking-wider">Our Expertise</span>
+            <span className="fw-bold text-st-secondary text-uppercase tracking-wider">Our Expertise</span>
             <h2 className="fs-1 fw-semibold text-st-primary mt-2">Explore Specialties</h2>
           </div>
-          <div className="row g-4">
-            {[
-              { icon: 'heart-pulse', name: 'Cardiology', desc: 'Expert care for heart health and cardiovascular systems.' },
-              { icon: 'lightning-charge', name: 'Neurology', desc: 'Advanced diagnostics and treatment for the nervous system.' },
-              { icon: 'bandaid', name: 'Orthopedics', desc: 'Surgical and non-surgical care for musculoskeletal issues.' },
-              { icon: 'emoji-smile', name: 'Pediatrics', desc: 'Compassionate medical care for children and adolescents.' }
-            ].map((item, index) => (
-              <div key={index} className="col-sm-6 col-lg-3">
-                <div className="card h-100 border-0 shadow-sm p-4 rounded-4 hover-border-st-secondary transition-all">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center mb-3" style={{ width: '48px', height: '48px', backgroundColor: 'rgba(0, 24, 53, 0.1)' }}>
-                    <i className={`bi bi-${item.icon} fs-3 text-st-primary`}></i>
-                  </div>
-                  <h3 className="fs-5 fw-semibold text-st-primary mb-2">{item.name}</h3>
-                  <p className="text-muted mb-0">{item.desc}</p>
-                </div>
+          
+          {errorSpecialties && (
+            <div className="alert alert-danger text-center mb-4" role="alert">
+              {errorSpecialties}
+            </div>
+          )}
+
+          {loadingSpecialties ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-st-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="row g-4">
+              {specialties.length > 0 ? specialties.map((spec) => (
+                <div key={spec.id} className="col-sm-6 col-lg-3">
+                  <div className="card h-100 border-0 shadow-sm p-4 rounded-4 hover-border-st-secondary transition-all">
+                    <div className="rounded-circle d-flex align-items-center justify-content-center mb-3" style={{ width: '48px', height: '48px', backgroundColor: 'rgba(0, 24, 53, 0.1)' }}>
+                      <i className={`bi bi-heart-pulse fs-3 text-st-primary`}></i>
+                    </div>
+                    <h3 className="small fw-bold text-st-secondary text-uppercase tracking-wider mb-3"><Link to={`/department/${spec.id}`} className="text-decoration-none">{spec.name}</Link></h3>
+                    <p className="text-muted mb-0">{spec.description}</p>
+                  </div>
+                </div>
+              )) : (
+                <div className="col-12 text-center py-4">
+                  <p className="text-muted">No specialties found</p>
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Top Doctors Section */}
@@ -137,13 +240,34 @@ export const HomePage: React.FC = () => {
                 View All Doctors <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
-            <div className="row g-4">
-              {topDoctors.map(doctor => (
-                <div key={doctor.id} className="col-md-4">
-                  <DoctorCard doctor={doctor} />
+
+            {errorDoctors && (
+              <div className="alert alert-danger text-center mb-4" role="alert">
+                {errorDoctors}
+              </div>
+            )}
+
+            {loadingDoctors ? (
+              <div className="text-center py-5">
+                <div className="spinner-border text-st-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="row g-4">
+                {doctors.length > 0 ? (
+                  doctors.slice(0, 6).map(doctor => (
+                    <div key={doctor.id} className="col-md-4">
+                      <DoctorCard doctor={doctor} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-12 text-center py-4">
+                    <p className="text-muted">No doctors available</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
       </main>

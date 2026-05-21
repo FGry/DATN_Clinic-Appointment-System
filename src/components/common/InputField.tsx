@@ -6,10 +6,11 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string; // Bổ sung prop error
 }
 
-export const InputField: React.FC<InputFieldProps> = ({ label, icon, type, id, error, className = '', ...props }) => {
+export const InputField: React.FC<InputFieldProps> = ({ label, icon, type, id, error, className = '', value, ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === 'password';
   const inputType = isPassword && showPassword ? 'text' : type;
+  const safeValue = value ?? '';
 
   // Nếu có lỗi, thêm class is-invalid của Bootstrap để đổi viền thành màu đỏ
   const errorClass = error ? 'is-invalid border-danger' : '';
@@ -28,6 +29,7 @@ export const InputField: React.FC<InputFieldProps> = ({ label, icon, type, id, e
           type={inputType}
           className={`form-control py-2 ${errorClass} ${className}`}
           {...props}
+          value={safeValue}
         />
         {isPassword && (
           <button

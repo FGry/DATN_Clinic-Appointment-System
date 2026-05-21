@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { PatientLayout } from '../../components/layout/PatientLayout';
 import { authService } from '../../services/authService';
 import {
@@ -29,8 +29,24 @@ const formatDateTime = (appointment: PatientAppointment) => {
   }).format(date);
 };
 
+const getTodayDateValue = () => new Date().toISOString().split('T')[0];
+
+const buildHalfHourSlots = () => {
+  const slots: string[] = [];
+
+  for (let hour = 8; hour < 17; hour += 1) {
+    slots.push(`${String(hour).padStart(2, '0')}:00`);
+    slots.push(`${String(hour).padStart(2, '0')}:30`);
+  }
+
+  slots.push('17:00');
+
+  return slots;
+};
+
 export const PatientAppointmentsPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [showModal, setShowModal] = useState(searchParams.get('openBooking') === '1');
   const [appointments, setAppointments] = useState<PatientAppointment[]>([]);
   const [doctors, setDoctors] = useState<PatientDoctor[]>([]);
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -38,6 +54,7 @@ export const PatientAppointmentsPage: React.FC = () => {
   const [yearFilter, setYearFilter] = useState('ALL');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const preferredDoctorId = Number(searchParams.get('doctorId') ?? '0');
 
   const loadData = async () => {
     setLoading(true);
@@ -59,6 +76,12 @@ export const PatientAppointmentsPage: React.FC = () => {
   useEffect(() => {
     void loadData();
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('openBooking') === '1') {
+      setShowModal(true);
+    }
+  }, [searchParams]);
 
   const years = useMemo(
     () => Array.from(new Set(appointments.map((item) => new Date(item.appointmentDate).getFullYear()))),
@@ -84,7 +107,12 @@ export const PatientAppointmentsPage: React.FC = () => {
           <button
             className="btn fw-bold px-4 py-2 d-flex align-items-center gap-2 rounded-3 shadow-sm text-white"
             style={{ backgroundColor: '#001835' }}
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setShowModal(true);
+              if (searchParams.get('openBooking') === '1') {
+                setSearchParams({}, { replace: true });
+              }
+            }}
           >
             <i className="bi bi-calendar-plus fs-5"></i> Book New Appointment
           </button>
@@ -179,9 +207,14 @@ export const PatientAppointmentsPage: React.FC = () => {
         {showModal && (
           <BookingModal
             doctors={doctors}
-            onClose={() => setShowModal(false)}
+            preferredDoctorId={preferredDoctorId}
+            onClose={() => {
+              setShowModal(false);
+              setSearchParams({}, { replace: true });
+            }}
             onSaved={() => {
               setShowModal(false);
+              setSearchParams({}, { replace: true });
               void loadData();
             }}
           />
@@ -193,27 +226,134 @@ export const PatientAppointmentsPage: React.FC = () => {
 
 type BookingModalProps = {
   doctors: PatientDoctor[];
+  preferredDoctorId?: number;
   onClose: () => void;
   onSaved: () => void;
 };
 
-const BookingModal: React.FC<BookingModalProps> = ({ doctors, onClose, onSaved }) => {
+const BookingModal: React.FC<BookingModalProps> = ({ doctors, preferredDoctorId, onClose, onSaved }) => {
   const session = authService.getSession();
+  const today = getTodayDateValue();
   const [payload, setPayload] = useState<AppointmentPayload>({
-    doctorId: doctors[0]?.id ?? 0,
-    appointmentDate: '',
+    doctorId: preferredDoctorId ?? doctors[0]?.id ?? 0,
+    appointmentDate: today,
     appointmentTime: '',
     reason: '',
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [scheduleLoading, setScheduleLoading] = useState(false);
+  const [scheduleError, setScheduleError] = useState('');
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
 
   const selectedDoctor = doctors.find((doctor) => doctor.id === payload.doctorId);
+  const bookedSlotSet = useMemo(() => new Set(bookedSlots), [bookedSlots]);
+
+  useEffect(() => {
+    if (doctors.length === 0) {
+      return;
+    }
+
+    setPayload((current) => {
+      const preferredDoctorExists = preferredDoctorId ? doctors.some((doctor) => doctor.id === preferredDoctorId) : false;
+      const nextDoctorId = preferredDoctorExists ? preferredDoctorId : current.doctorId || doctors[0].id;
+
+      return {
+        ...current,
+        doctorId: nextDoctorId,
+        appointmentDate: current.appointmentDate || today,
+      };
+    });
+  }, [doctors, preferredDoctorId, today]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadAvailability = async () => {
+      if (!payload.doctorId || !payload.appointmentDate) {
+        setAvailableSlots([]);
+        setBookedSlots([]);
+        return;
+      }
+
+      setScheduleLoading(true);
+      setScheduleError('');
+
+      try {
+        const appointmentData = await patientAppointmentApi.getAppointments();
+
+        if (cancelled) {
+          return;
+        }
+
+        const nextSlots = buildHalfHourSlots();
+
+        const nextBookedSlots = appointmentData
+          .filter((appointment) => {
+            return appointment.doctorId === payload.doctorId && appointment.appointmentDate === payload.appointmentDate;
+          })
+          .map((appointment) => appointment.appointmentTime.slice(0, 5));
+
+        setAvailableSlots(nextSlots);
+        setBookedSlots(nextBookedSlots);
+
+        if (payload.appointmentTime && (!nextSlots.includes(payload.appointmentTime) || nextBookedSlots.includes(payload.appointmentTime))) {
+          setPayload((current) => ({ ...current, appointmentTime: '' }));
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setAvailableSlots([]);
+          setBookedSlots([]);
+          setScheduleError(err instanceof Error ? err.message : 'Unable to load doctor availability');
+        }
+      } finally {
+        if (!cancelled) {
+          setScheduleLoading(false);
+        }
+      }
+    };
+
+    void loadAvailability();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [payload.doctorId, payload.appointmentDate, payload.appointmentTime, selectedDoctor?.fullName]);
+
+  const handleDoctorChange = (doctorId: number) => {
+    setPayload((current) => ({
+      ...current,
+      doctorId,
+      appointmentTime: '',
+    }));
+  };
+
+  const handleDateChange = (appointmentDate: string) => {
+    setPayload((current) => ({
+      ...current,
+      appointmentDate,
+      appointmentTime: '',
+    }));
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setSaving(true);
     setError('');
+
+    if (!availableSlots.includes(payload.appointmentTime)) {
+      setSaving(false);
+      setError('Please choose an available time slot.');
+      return;
+    }
+
+    if (bookedSlotSet.has(payload.appointmentTime)) {
+      setSaving(false);
+      setError('That time slot has already been booked. Please choose another slot.');
+      return;
+    }
+
     try {
       await patientAppointmentApi.createAppointment(payload);
       onSaved();
@@ -228,7 +368,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ doctors, onClose, onSaved }
     <>
       <div className="modal-backdrop fade show" style={{ backdropFilter: 'blur(5px)', backgroundColor: 'rgba(0,24,53,0.5)' }}></div>
       <div className="modal fade show d-block" tabIndex={-1}>
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <form className="modal-content border-0 shadow-lg rounded-4 overflow-hidden" onSubmit={handleSubmit}>
             <div className="modal-header bg-white py-4 px-4 border-bottom">
               <h4 className="modal-title fw-bolder" style={{ color: '#001835' }}>Book New Appointment</h4>
@@ -251,7 +391,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ doctors, onClose, onSaved }
                     className="form-select"
                     required
                     value={payload.doctorId || ''}
-                    onChange={(event) => setPayload((current) => ({ ...current, doctorId: Number(event.target.value) }))}
+                    onChange={(event) => handleDoctorChange(Number(event.target.value))}
                   >
                     <option value="">Select Doctor</option>
                     {doctors.map((doctor) => <option key={doctor.id} value={doctor.id}>{doctor.fullName}</option>)}
@@ -259,11 +399,41 @@ const BookingModal: React.FC<BookingModalProps> = ({ doctors, onClose, onSaved }
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-bold text-muted small">Appointment Date</label>
-                  <input className="form-control" type="date" required value={payload.appointmentDate} onChange={(event) => setPayload((current) => ({ ...current, appointmentDate: event.target.value }))} />
+                  <input className="form-control" type="date" min={today} required value={payload.appointmentDate} onChange={(event) => handleDateChange(event.target.value)} />
                 </div>
-                <div className="col-md-6">
+                <div className="col-12">
                   <label className="form-label fw-bold text-muted small">Preferred Time</label>
-                  <input className="form-control" type="time" required value={payload.appointmentTime} onChange={(event) => setPayload((current) => ({ ...current, appointmentTime: event.target.value }))} />
+                  {scheduleLoading ? (
+                    <div className="border rounded-3 p-3 text-muted small">Loading available slots...</div>
+                  ) : scheduleError ? (
+                    <div className="alert alert-warning mb-0">{scheduleError}</div>
+                  ) : availableSlots.length === 0 ? (
+                    <div className="border rounded-3 p-3 text-muted small">No available schedule found for this doctor on the selected date.</div>
+                  ) : (
+                    <div className="d-flex flex-wrap gap-2">
+                      {availableSlots.map((slot) => {
+                        const isBooked = bookedSlotSet.has(slot);
+                        const isSelected = payload.appointmentTime === slot;
+
+                        return (
+                          <button
+                            key={slot}
+                            type="button"
+                            className={`btn btn-sm rounded-3 fw-bold px-3 py-2 ${isSelected ? 'text-white' : 'btn-outline-secondary'}`}
+                            style={{
+                              backgroundColor: isSelected ? '#001835' : undefined,
+                              opacity: isBooked ? 0.35 : 1,
+                              textDecoration: isBooked ? 'line-through' : 'none',
+                            }}
+                            disabled={isBooked}
+                            onClick={() => setPayload((current) => ({ ...current, appointmentTime: slot }))}
+                          >
+                            {slot}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
                 <div className="col-12">
                   <label className="form-label fw-bold text-muted small">Reason for Visit</label>
@@ -277,7 +447,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ doctors, onClose, onSaved }
             </div>
             <div className="modal-footer bg-light py-3 px-4 border-top-0">
               <button type="button" className="btn btn-link text-muted fw-bold text-decoration-none px-4" onClick={onClose}>Cancel</button>
-              <button type="submit" className="btn text-white fw-bold px-4 rounded-3 shadow-sm" style={{ backgroundColor: '#001835' }} disabled={saving || doctors.length === 0}>
+              <button type="submit" className="btn text-white fw-bold px-4 rounded-3 shadow-sm" style={{ backgroundColor: '#001835' }} disabled={saving || doctors.length === 0 || !payload.doctorId || !payload.appointmentDate || !payload.appointmentTime || !availableSlots.includes(payload.appointmentTime) || bookedSlotSet.has(payload.appointmentTime) || scheduleLoading}>
                 {saving ? 'Creating...' : 'Create Appointment'} <i className="bi bi-arrow-right ms-2"></i>
               </button>
             </div>

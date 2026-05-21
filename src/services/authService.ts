@@ -75,7 +75,6 @@ export const authService = {
   saveSession: (response: LoginResponse) => {
     let role = response.data.role;
 
-    // Fallback: If role is not in the response body, try to decode it from the token
     if (!role && response.data.accessToken) {
       try {
         const payload = JSON.parse(atob(response.data.accessToken.split('.')[1]));

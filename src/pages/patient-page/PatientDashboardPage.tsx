@@ -94,7 +94,7 @@ export const PatientDashboardPage: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-muted small flex-grow-1">{doctor.experience || 'Available for patient consultation.'}</p>
-                  <Link to="/patient/appointments" className="btn text-white fw-bold rounded-3" style={{ backgroundColor: '#001835' }}>
+                  <Link to={`/patient/appointments?doctorId=${doctor.id}&openBooking=1`} className="btn text-white fw-bold rounded-3" style={{ backgroundColor: '#001835' }}>
                     Book Appointment
                   </Link>
                 </div>
