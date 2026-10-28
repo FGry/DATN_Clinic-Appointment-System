@@ -3,9 +3,9 @@ spring:
     name: clinic-appointment
 
   datasource:
-    url: ${SUPABASE_DB_URL:jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require}
-    username: postgres.sbjnwfcjcqvtwuwrdcvt
-    password: pFOZeSZwWPDKqeM8
+    url: ${SUPABASE_DB_URL:jdbc:postgresql://db.ktywqwswlnelsfdvmlis.supabase.co:5432/postgres?sslmode=require}
+    username: ${SUPABASE_DB_USERNAME:postgres}
+    password: ${SUPABASE_DB_PASSWORD:yRfwn2K_QWZF6LG}
     driver-class-name: org.postgresql.Driver
 
     hikari:
@@ -31,7 +31,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: viethuu1205@gmail.com
-    password: gakv tyrz igjg leay
+    password: nooe afvx ozpn jqza
     properties:
       mail:
         smtp:
